@@ -1,4 +1,7 @@
 import {
+  EditionData,
+  Metadata,
+  SeriesData,
   type NFTMetadataDisplay,
   type NFTMetadataMedias,
   type PlayData,
@@ -19,6 +22,7 @@ export function useFlow() {
   const momentNFT = useStore((state) => state.momentNFT)
   const playId = useStore((state) => state.playId)
   const golazosSetName = useStore((state) => state.golazosSetName)
+  const seriesName = useStore((state) => state.seriesName)
 
   /**
    * /////////////////////////////////////////////////////////////////////
@@ -43,6 +47,35 @@ export function useFlow() {
     `
   const medias = useScript<NFTMetadataMedias>({
     cadence: CADENCE_SCRIPT_NFTMetadataMedias,
+    args: (arg, t) => [arg(targetAddress, t.Address), arg(momentNFT, t.UInt64)],
+    options: {
+      staleTime: Infinity,
+      cacheTime: Infinity,
+    },
+  })
+  /**
+   * /////////////////////////////////////////////////////////////////////
+   * /////////////////////////////////////////////////////////////////////
+   */
+  const CADENCE_SCRIPT_TRAITS = `
+  import Golazos from 0xGOLAZOSADDRESS
+  import MetadataViews from 0xMETADATAVIEWSADDRESS
+  
+  pub fun main(address: Address, id: UInt64):  MetadataViews.Traits {
+      let account = getAccount(address)
+  
+      let collectionRef = account.getCapability(Golazos.CollectionPublicPath)
+              .borrow<&{Golazos.MomentNFTCollectionPublic}>()
+              ?? panic("Could not borrow capability from public collection")
+  
+      let nft = collectionRef.borrowMomentNFT(id: id)
+              ?? panic("Couldn't borrow momentNFT")
+  
+      return nft.resolveView(Type<MetadataViews.Traits>())! as! MetadataViews.Traits
+  }
+    `
+  const traits = useScript<Metadata>({
+    cadence: CADENCE_SCRIPT_TRAITS,
     args: (arg, t) => [arg(targetAddress, t.Address), arg(momentNFT, t.UInt64)],
     options: {
       staleTime: Infinity,
@@ -189,7 +222,44 @@ export function useFlow() {
       staleTime: Infinity,
     },
   })
+  /**
+   * /////////////////////////////////////////////////////////////////////
+   * /////////////////////////////////////////////////////////////////////
+   */
+  const CADENCE_SCRIPT_ALL_SERIES_NAMES = `
+  import Golazos from 0xGOLAZOSADDRESS
 
+  pub fun main(): [String] {
+      return Golazos.getAllSeriesNames()
+  }
+  `
+  const allSeriesNames = useScript<string[]>({
+    cadence: CADENCE_SCRIPT_ALL_SERIES_NAMES,
+    args: (arg, t) => [],
+    options: {
+      cacheTime: Infinity,
+      staleTime: Infinity,
+    },
+  })
+  /**
+   * /////////////////////////////////////////////////////////////////////
+   * /////////////////////////////////////////////////////////////////////
+   */
+  const CADENCE_SCRIPT_SERIES = `
+  import Golazos from 0xGOLAZOSADDRESS
+
+  pub fun main(seriesName: String): Golazos.SeriesData? {
+      return Golazos.getSeriesDataByName(name: seriesName)
+  }
+  `
+  const seriesData = useScript<SeriesData>({
+    cadence: CADENCE_SCRIPT_SERIES,
+    args: (arg, t) => [arg(seriesName, t.String)],
+    options: {
+      cacheTime: Infinity,
+      staleTime: Infinity,
+    },
+  })
   /**
    * /////////////////////////////////////////////////////////////////////
    * /////////////////////////////////////////////////////////////////////
@@ -216,6 +286,33 @@ export function useFlow() {
       staleTime: Infinity,
     },
   })
+
+  /**
+   * /////////////////////////////////////////////////////////////////////
+   * /////////////////////////////////////////////////////////////////////
+   */
+  const CADENCE_SCRIPT_ALL_EDITIONS = `
+  import Golazos from 0xGOLAZOSADDRESS
+
+  pub fun main(): [Golazos.EditionData] {
+      let editions: [Golazos.EditionData] = []
+      var id: UInt64 = Golazos.nextEditionID - 10
+      // Note < , as nextEditionID has not yet been used
+      while id < Golazos.nextEditionID {
+          editions.append(Golazos.getEditionData(id: id)!)
+          id = id + 1
+      }
+      return editions
+  }
+  `
+  const allEditions = useScript<EditionData[]>({
+    cadence: CADENCE_SCRIPT_ALL_EDITIONS,
+    args: (arg, t) => [],
+    options: {
+      cacheTime: Infinity,
+      staleTime: Infinity,
+    },
+  })
   return {
     medias, // MetadataViews: user's moment NFT medias
     properties, // MetadataViews: user's moment NFT properties
@@ -225,5 +322,9 @@ export function useFlow() {
     playData, // Plays: Details
     allSetNames, // Sets: list by content types
     setData, // Sets: single set data
+    allSeriesNames,
+    seriesData,
+    allEditions,
+    traits,
   }
 }

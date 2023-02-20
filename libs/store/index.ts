@@ -9,6 +9,8 @@ interface State {
   setPlayId: (playId: number) => void
   golazosSetName: string
   setGolazosSetName: (playId: string) => void
+  seriesName: string
+  setSeriesName: (seriesName: string) => void
 }
 
 export const useStore = create<State>((set) => ({
@@ -22,4 +24,6 @@ export const useStore = create<State>((set) => ({
   golazosSetName: 'Jugones',
   setGolazosSetName: (golazosSetName) =>
     set(() => ({ golazosSetName: golazosSetName })),
+  seriesName: 'Series 1',
+  setSeriesName: (seriesName) => set(() => ({ seriesName: seriesName })),
 }))

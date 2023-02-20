@@ -1,30 +1,45 @@
+export interface EditionData {
+  id: string
+  seriesID: string
+  setID: string
+  playID: string
+  maxMintSize: string
+  tier: Tier
+  numMinted: string
+}
+
+export enum Tier {
+  Common = 'COMMON',
+  Rare = 'RARE',
+  Uncommon = 'UNCOMMON',
+}
+
 export interface NFTMetadataMedias {
-  items: Item[];
+  items: Item[]
 }
 
 export interface Item {
-  file:      File;
-  mediaType: MediaType;
+  file: File
+  mediaType: MediaType
 }
 
 export interface File {
-  url: string;
+  url: string
 }
 
 export enum MediaType {
-  ImagePNG = "image/png",
-  VideoMp4 = "video/mp4",
+  ImagePNG = 'image/png',
+  VideoMp4 = 'video/mp4',
 }
 
-
 export interface NFTMetadataDisplay {
-  name:        string;
-  description: string;
-  thumbnail:   Thumbnail;
+  name: string
+  description: string
+  thumbnail: Thumbnail
 }
 
 export interface Thumbnail {
-  url: string;
+  url: string
 }
 
 export interface SetData {
@@ -32,6 +47,12 @@ export interface SetData {
   name: string
   locked: boolean
   setPlaysInEditions: { [key: number]: boolean }
+}
+
+export interface SeriesData {
+  id:     string;
+  name:   string;
+  active: boolean;
 }
 
 export interface PlayData {

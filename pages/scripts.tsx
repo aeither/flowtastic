@@ -19,14 +19,31 @@ import {
 } from '@chakra-ui/react'
 
 const Home: NextPage = () => {
-  const { medias, allPlays, collectionIDs, nftMetadata, properties, playData } =
-    useFlow()
-  console.log('🚀 ~ file: scripts.tsx:23 ~ playData:', playData.data)
-  console.log('🚀 ~ file: scripts.tsx:23 ~ properties:', properties.data)
-  console.log('🚀 ~ file: scripts.tsx:23 ~ nftMetadata:', nftMetadata.data)
-  console.log('🚀 ~ file: scripts.tsx:23 ~ collectionIDs:', collectionIDs.data)
-  console.log('🚀 ~ file: scripts.tsx:23 ~ allPlays:', allPlays.data)
-  console.log('🚀 ~ file: scripts.tsx:23 ~ medias:', medias.data)
+  const {
+    medias,
+    allPlays,
+    collectionIDs,
+    nftMetadata,
+    properties,
+    playData,
+    traits,
+    allEditions,
+    allSeriesNames,
+    seriesData
+  } = useFlow()
+    console.log("🚀 ~ file: scripts.tsx:34 ~ seriesData:", seriesData.data)
+  console.log(
+    '🚀 ~ file: scripts.tsx:33 ~ allSeriesNames:',
+    allSeriesNames.data
+  )
+  // console.log('🚀 ~ file: scripts.tsx:32 ~ allEditions:', allEditions.data)
+  // console.log('🚀 ~ file: scripts.tsx:32 ~ traits:', traits.data)
+  // console.log('🚀 ~ file: scripts.tsx:23 ~ playData:', playData.data)
+  // console.log('🚀 ~ file: scripts.tsx:23 ~ properties:', properties.data)
+  // console.log('🚀 ~ file: scripts.tsx:23 ~ nftMetadata:', nftMetadata.data)
+  // console.log('🚀 ~ file: scripts.tsx:23 ~ collectionIDs:', collectionIDs.data)
+  // console.log('🚀 ~ file: scripts.tsx:23 ~ allPlays:', allPlays.data)
+  // console.log('🚀 ~ file: scripts.tsx:23 ~ medias:', medias.data)
 
   // hello query cause refetch
   // const hello = api.db.hello.useQuery({ text: 'from tRPC' })
