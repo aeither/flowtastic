@@ -45,8 +45,8 @@ export function useFlow() {
     cadence: CADENCE_SCRIPT_NFTMetadataMedias,
     args: (arg, t) => [arg(targetAddress, t.Address), arg(momentNFT, t.UInt64)],
     options: {
-      cacheTime: Infinity,
       staleTime: Infinity,
+      cacheTime: Infinity,
     },
   })
   /**
@@ -56,17 +56,17 @@ export function useFlow() {
   const CADENCE_SCRIPT_PROPERTIES = `
   import NonFungibleToken from 0xNONFUNGIBLETOKENADDRESS
   import Golazos from 0xGOLAZOSADDRESS
-  
+
   pub fun main(address: Address, id: UInt64): [AnyStruct] {
       let account = getAccount(address)
-  
+
       let collectionRef = account.getCapability(Golazos.CollectionPublicPath)
           .borrow<&{Golazos.MomentNFTCollectionPublic}>()
           ?? panic("Could not borrow capability from public collection")
-      
+
       let nft = collectionRef.borrowMomentNFT(id: id)
           ?? panic("Couldn't borrow momentNFT")
-  
+
       return [nft.id, nft.editionID, nft.serialNumber, nft.mintingDate]
   }
   `
@@ -85,13 +85,13 @@ export function useFlow() {
   const CADENCE_SCRIPT_COLLECTION_IDS = `
   import NonFungibleToken from 0xNONFUNGIBLETOKENADDRESS
   import Golazos from 0xGOLAZOSADDRESS
-  
+
   pub fun main(address: Address): [UInt64] {
       let account = getAccount(address)
-  
+
       let collectionRef = account.getCapability(Golazos.CollectionPublicPath).borrow<&{NonFungibleToken.CollectionPublic}>()
           ?? panic("Could not borrow capability from public collection")
-      
+
       return collectionRef.getIDs()
   }
   `
@@ -110,17 +110,17 @@ export function useFlow() {
   const CADENCE_SCRIPT_NFTMetadataDisplay = `
   import Golazos from 0xGOLAZOSADDRESS
   import MetadataViews from 0xMETADATAVIEWSADDRESS
-  
+
   pub fun main(address: Address, id: UInt64):  MetadataViews.Display {
       let account = getAccount(address)
-  
+
       let collectionRef = account.getCapability(Golazos.CollectionPublicPath)
               .borrow<&{Golazos.MomentNFTCollectionPublic}>()
               ?? panic("Could not borrow capability from public collection")
-  
+
       let nft = collectionRef.borrowMomentNFT(id: id)
               ?? panic("Couldn't borrow momentNFT")
-  
+
       return nft.resolveView(Type<MetadataViews.Display>())! as! MetadataViews.Display
   }
   `
@@ -176,7 +176,7 @@ export function useFlow() {
    */
   const CADENCE_SCRIPT_SET = `
   import Golazos from 0xGOLAZOSADDRESS
-  
+
   pub fun main(setName: String): Golazos.SetData? {
       return Golazos.getSetDataByName(name: setName)
   }
@@ -210,7 +210,7 @@ export function useFlow() {
   `
   const allPlays = useScript<PlayData[]>({
     cadence: CADENCE_SCRIPT_ALL_PLAYS,
-    args: (arg, t) => [arg(golazosSetName, t.String)],
+    args: (arg, t) => [],
     options: {
       cacheTime: Infinity,
       staleTime: Infinity,
