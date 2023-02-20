@@ -5,7 +5,7 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 import { api } from '@/libs/api'
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: 'from tRPC' })
+  const hello = api.db.hello.useQuery({ text: 'from tRPC' })
 
   return (
     <>
