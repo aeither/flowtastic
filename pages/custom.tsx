@@ -4,25 +4,11 @@ import {
   type PlayData,
   type SetData,
 } from '@/libs/types'
-import { createClient, FlowProvider, networks, useScript } from '@flowity/react'
+import { useScript } from '@flowity/react'
 import { type FC } from 'react'
 
-const client = createClient({
-  fclConfig: {
-    ...networks.mainnet,
-    '0xNONFUNGIBLETOKENADDRESS': '0x1d7e57aa55817448',
-    '0xGOLAZOSADDRESS': '0x87ca73a41bb50ad5',
-    '0xMETADATAVIEWSADDRESS': '0x1d7e57aa55817448',
-  },
-})
-
-export default function WithFlowProvider() {
-  return (
-    <FlowProvider client={client}>
-      <h1>useScript Example</h1>
-      <Custom />
-    </FlowProvider>
-  )
+export default function CustomComponent() {
+  return <Custom />
 }
 
 const NFTMetadataMediasComponent: FC = () => {
