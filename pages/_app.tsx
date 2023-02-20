@@ -7,7 +7,8 @@ import { api } from '@/libs/api'
 
 import '@/styles/globals.css'
 import { theme } from '@/styles/theme'
-import ClientOnly from 'components/client-only'
+import ClientOnly from '@/components/layout/client-only'
+import Layout from '@/components/layout'
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -17,7 +18,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <ChakraProvider theme={theme}>
         <ClientOnly>
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </ClientOnly>
       </ChakraProvider>
     </SessionProvider>

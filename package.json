@@ -10,6 +10,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.0.17",
     "@chakra-ui/react": "^2.5.1",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
@@ -27,6 +28,7 @@
     "next-auth": "^4.19.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-spinners": "^0.13.8",
     "superjson": "1.9.1",
     "zod": "^3.20.2"
   },
