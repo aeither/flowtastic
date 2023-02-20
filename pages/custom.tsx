@@ -1,11 +1,11 @@
 import {
-  NFTMetadataDisplay,
-  NFTMetadataMedias,
-  PlayData,
-  SetData,
-} from '@/utils/types'
+  type NFTMetadataDisplay,
+  type NFTMetadataMedias,
+  type PlayData,
+  type SetData,
+} from '@/libs/types'
 import { createClient, FlowProvider, networks, useScript } from '@flowity/react'
-import { FC } from 'react'
+import { type FC } from 'react'
 
 const client = createClient({
   fclConfig: {

@@ -3,11 +3,11 @@ import { type Session } from 'next-auth'
 import { SessionProvider } from 'next-auth/react'
 import { ChakraProvider } from '@chakra-ui/react'
 
-import { api } from '@/utils/api'
+import { api } from '@/libs/api'
 
 import '@/styles/globals.css'
 import { theme } from '@/styles/theme'
-import ClientOnly from '@/components/client-only'
+import ClientOnly from 'components/client-only'
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
