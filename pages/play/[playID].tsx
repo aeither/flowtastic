@@ -1,3 +1,4 @@
+import Rating from '@/components/shared/rating'
 import { api } from '@/libs/api'
 import { useFlow } from '@/libs/hooks/use-flow'
 import { getPlayImage } from '@/libs/utils/helpers'
@@ -64,7 +65,6 @@ const Play: NextPage = () => {
             <ButtonGroup spacing="2">
               <NextLink href={`/play/${play.id}`}>
                 <Button
-
                   onClick={() => {
                     console.log('')
                   }}
@@ -73,6 +73,14 @@ const Play: NextPage = () => {
                 </Button>
               </NextLink>
             </ButtonGroup>
+
+            <Rating
+              size={48}
+              icon="star"
+              scale={5}
+              fillColor="gold"
+              strokeColor="grey"
+            />
           </VStack>
         )}
       </main>

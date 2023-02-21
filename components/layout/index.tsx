@@ -51,9 +51,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           )}
         </ButtonGroup>
       </Flex>
-      <main className="flex w-full flex-col items-center justify-center pt-16">
-        {children}
-      </main>
+      <main>{children}</main>
       {/* Footer */}
     </div>
   )
