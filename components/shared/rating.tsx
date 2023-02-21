@@ -1,5 +1,5 @@
-import React, { ForwardedRef, useState } from 'react'
-import { Box, Button, Icon, IconButton, Stack, Text } from '@chakra-ui/react'
+import React, { ForwardedRef, useEffect, useState } from 'react'
+import { Box, Button, HStack, Icon, IconButton, Stack, Text } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons'
 import { UseFormSetValue } from 'react-hook-form'
 import { ReviewFormInput } from '../home/review-form'
@@ -10,16 +10,30 @@ interface RatingProps {
   scale: number
   fillColor: string
   strokeColor: string
-  setValue: UseFormSetValue<ReviewFormInput>
+  setValue?: UseFormSetValue<ReviewFormInput>
+  viewOnly?: boolean
+  viewRating?: number
 }
 
 const Rating = React.forwardRef(
   (
-    { size, icon, scale, fillColor, strokeColor, setValue }: RatingProps,
+    {
+      size,
+      icon,
+      scale,
+      fillColor,
+      strokeColor,
+      setValue,
+      viewOnly,
+      viewRating,
+    }: RatingProps,
     ref: ForwardedRef<HTMLInputElement>
   ) => {
-    const [rating, setRating] = useState(0)
     const buttons = []
+    const [rating, setRating] = useState(0)
+    useEffect(() => {
+      if (viewOnly) setRating((viewRating && viewRating) || 0)
+    }, [viewOnly, viewRating])
 
     const onClick = (idx: number) => {
       if (!isNaN(idx)) {
@@ -28,23 +42,29 @@ const Rating = React.forwardRef(
           setRating(0)
         } else {
           setRating(idx)
-          setValue('rating', idx)
+          setValue && setValue('rating', idx)
         }
       }
     }
 
     const RatingIcon = ({ fill }: { fill: boolean }) => {
       return (
-        <IconButton
-          name={icon}
-          size={`${size}px`}
+        <StarIcon
           color={fillColor}
           stroke={strokeColor}
-          background="transparent"
-          _hover={{ bg: 'transparent' }}
-          icon={<StarIcon boxSize={'8'} fillOpacity={fill ? '100%' : '0'} />}
-          aria-label={''} //   onClick={onClick}
+          boxSize={size}
+          fillOpacity={fill ? '100%' : '0'}
         />
+        // <IconButton
+        //   name={icon}
+        //   size={`${size}px`}
+        //   color={fillColor}
+        //   stroke={strokeColor}
+        //   background="transparent"
+        //   _hover={{ bg: 'transparent' }}
+        //   icon={<StarIcon boxSize={'8'} fillOpacity={fill ? '100%' : '0'} />}
+        //   aria-label={''} //   onClick={onClick}
+        // />
       )
     }
 
@@ -57,7 +77,7 @@ const Rating = React.forwardRef(
           width={`${size}px`}
           variant={'unstyled'}
           mx={1}
-          onClick={() => onClick(idx)}
+          onClick={() => (viewOnly ? {} : onClick(idx))}
           _focus={{ outline: 0 }}
         >
           <RatingIcon fill={fill} />
@@ -70,18 +90,18 @@ const Rating = React.forwardRef(
     }
 
     return (
-      <Stack isInline mt={8} justify="center">
+      <HStack my={8} justify="center">
         <input name="rating" type="hidden" value={rating} ref={ref} />
         {buttons}
-        <Box width={`${size * 1.5}px`} textAlign="center">
+        {/* <Box width={`${size * 1.5}px`} textAlign="center">
           <Text fontSize="sm" textTransform="uppercase">
             Rating
           </Text>
           <Text fontSize="2xl" fontWeight="semibold" lineHeight="1.2em">
             {rating}
           </Text>
-        </Box>
-      </Stack>
+        </Box> */}
+      </HStack>
     )
   }
 )
