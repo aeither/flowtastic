@@ -12,27 +12,70 @@ export const dbRouter = createTRPCRouter({
       }
     }),
 
-  user: protectedProcedure.query(async ({ ctx }) => {
-    const userId = ctx.session.user.id
-    return await ctx.prisma.user.findUnique({ where: { id: userId } })
-  }),
-
-  incrementUsage: protectedProcedure.mutation(async ({ ctx }) => {
-    /**
-     * Prisma DB check and update usage
-     */
-    const userId = ctx.session.user.id
-    const user = await ctx.prisma.user.findUnique({ where: { id: userId } })
-    if (!user) {
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'User not found in database.',
+  reviewAverage: publicProcedure
+    .input(
+      z.object({
+        playId: z.number(),
       })
-    }
+    )
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.review.aggregate({
+        _avg: {
+          rating: true,
+        },
+        _count: {
+          rating: true,
+        },
+        where: {
+          playId: {
+            equals: input.playId,
+          },
+        },
+        orderBy: {
+          rating: 'asc',
+        },
+      })
+    }),
 
-    return await ctx.prisma.user.update({
-      where: { id: userId },
-      data: { name: 'name name' },
-    })
-  }),
+  reviewsByPlayId: publicProcedure
+    .input(
+      z.object({
+        playId: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.review.findMany({
+        where: {
+          playId: input.playId,
+        },
+      })
+    }),
+
+  createReview: protectedProcedure
+    .input(
+      z.object({
+        playId: z.number(),
+        rating: z.number(),
+        title: z.string(),
+        description: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { playId, rating, title, description } = input
+      /**
+       * Prisma DB check and update usage
+       */
+      const userId = ctx.session.user.id
+      const user = await ctx.prisma.user.findUnique({ where: { id: userId } })
+      if (!user) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'User not found in database.',
+        })
+      }
+
+      return await ctx.prisma.review.create({
+        data: { playId, rating, title, description, userId },
+      })
+    }),
 })

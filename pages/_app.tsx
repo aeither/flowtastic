@@ -8,6 +8,7 @@ import { createClient, FlowProvider, networks } from '@flowity/react'
 import { type Session } from 'next-auth'
 import { SessionProvider } from 'next-auth/react'
 import { type AppType } from 'next/app'
+import { Toaster } from 'react-hot-toast'
 
 const client = createClient({
   fclConfig: {
@@ -29,6 +30,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
           <ClientOnly>
             <Layout>
               <Component {...pageProps} />
+              <Toaster />
             </Layout>
           </ClientOnly>
         </FlowProvider>

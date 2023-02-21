@@ -16,7 +16,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { type NextPage } from 'next'
-import { default as Link, default as NextLink } from 'next/link'
+import NextLink from 'next/link'
 
 const Home: NextPage = () => {
   const setPlayId = useStore((state) => state.setPlayId)
@@ -89,7 +89,7 @@ const Home: NextPage = () => {
                           variant="solid"
                           colorScheme="blue"
                           onClick={() => {
-                            setPlayId(play.id)
+                            setPlayId(Number(play.id))
                           }}
                         >
                           View Moment Details

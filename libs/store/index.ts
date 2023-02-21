@@ -5,8 +5,8 @@ interface State {
   setTargetAddress: (targetAddress: `0x${string}`) => void
   momentNFT: string
   setMomentNFT: (targetAddress: string) => void
-  playId: string
-  setPlayId: (playId: string) => void
+  playId: number
+  setPlayId: (playId: number) => void
   golazosSetName: string
   setGolazosSetName: (playId: string) => void
   seriesName: string
@@ -19,7 +19,7 @@ export const useStore = create<State>((set) => ({
     set(() => ({ targetAddress: targetAddress })),
   momentNFT: '802448578',
   setMomentNFT: (momentNFT) => set(() => ({ momentNFT: momentNFT })),
-  playId: '372',
+  playId: 372,
   setPlayId: (playId) => set(() => ({ playId: playId })),
   golazosSetName: 'Jugones',
   setGolazosSetName: (golazosSetName) =>
