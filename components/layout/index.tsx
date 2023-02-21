@@ -1,21 +1,18 @@
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import {
   Box,
-  Button,
   ButtonGroup,
   Flex,
   Heading,
   IconButton,
+  Link,
   Spacer,
-  Stack,
   useColorMode,
 } from '@chakra-ui/react'
 import { useSession } from 'next-auth/react'
 import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
+import NextLink from 'next/link'
 import { type ReactNode } from 'react'
-import { BeatLoader } from 'react-spinners'
 import { SignInModal } from './sign-in-modal'
 import { UserDropdown } from './user-dropdown'
 
@@ -35,9 +32,11 @@ export default function Layout({ children }: { children: ReactNode }) {
 
       {/* Navbar */}
       <Flex p={4} minWidth="max-content" alignItems="center" gap="2">
-        <Box p="2">
-          <Heading size="md">Flowtastic</Heading>
-        </Box>
+        <Link _hover={{ textDecoration: 'none' }} as={NextLink} href="/">
+          <Box p="2">
+            <Heading size="md">Flowtastic</Heading>
+          </Box>
+        </Link>
         <Spacer />
         <ButtonGroup gap="2">
           <IconButton

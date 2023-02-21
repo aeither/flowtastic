@@ -14,7 +14,7 @@ import {
   useScript,
   useAccount,
 } from '@flowity/react'
-import { type FC } from 'react'
+import { useEffect, type FC } from 'react'
 import { useStore } from '../store'
 
 export function useFlow() {
@@ -313,6 +313,14 @@ export function useFlow() {
       staleTime: Infinity,
     },
   })
+
+  /**
+   * Effects
+   */
+  useEffect(() => {
+    void playData.refetch()
+  }, [playId])
+
   return {
     medias, // MetadataViews: user's moment NFT medias
     properties, // MetadataViews: user's moment NFT properties

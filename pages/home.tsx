@@ -1,4 +1,5 @@
 import { useFlow } from '@/libs/hooks/use-flow'
+import { useStore } from '@/libs/store'
 import { getPlayImage } from '@/libs/utils/helpers'
 import {
   Button,
@@ -16,7 +17,10 @@ import {
 } from '@chakra-ui/react'
 import { type NextPage } from 'next'
 import { default as Link, default as NextLink } from 'next/link'
+
 const Home: NextPage = () => {
+  const setPlayId = useStore((state) => state.setPlayId)
+
   const {
     medias,
     allPlays,
@@ -65,10 +69,10 @@ const Home: NextPage = () => {
                     />
                     <Stack mt="6" spacing="3">
                       <Heading size="md">
-                        {`${play.metadata.PlayerFirstName} - ${play.metadata.PlayerLastName}`}
+                        {`${play.metadata.PlayerFirstName} ${play.metadata.PlayerLastName}`}
                       </Heading>
                       <Text>
-                        {`${play.metadata.PlayType} ${new Date(
+                        {`${play.metadata.PlayType} - ${new Date(
                           play.metadata.MatchDate
                         ).getFullYear()}`}
                       </Text>
@@ -85,7 +89,7 @@ const Home: NextPage = () => {
                           variant="solid"
                           colorScheme="blue"
                           onClick={() => {
-                            console.log('')
+                            setPlayId(play.id)
                           }}
                         >
                           View Moment Details
