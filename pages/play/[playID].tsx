@@ -1,16 +1,13 @@
 import { ReviewForm } from '@/components/home/review-form'
 import Rating from '@/components/shared/rating'
-import { api } from '@/libs/api'
+import { useDB } from '@/libs/hooks/use-db'
 import { useFlow } from '@/libs/hooks/use-flow'
+import { useStore } from '@/libs/store'
 import { getPlayImage } from '@/libs/utils/helpers'
 import {
-  Button,
-  ButtonGroup,
   Card,
   CardBody,
-  CardFooter,
   Center,
-  Divider,
   Heading,
   Image,
   Stack,
@@ -18,17 +15,23 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { type NextPage } from 'next'
-import { default as NextLink } from 'next/link'
 import { useRouter } from 'next/router'
+import { FC, useEffect } from 'react'
 
 const Play: NextPage = () => {
-  const hello = api.db.hello.useQuery({ text: 'from tRPC' })
+  const setPlayId = useStore((state) => state.setPlayId)
+  const { reviewAverage, reviewsByPlayId } = useDB()
   const { query, asPath } = useRouter()
   const { playData } = useFlow()
   const play = playData.data
 
-  console.log('🚀 ~ file: [play].tsx:12 ~ asPath:', asPath)
-  console.log('🚀 ~ file: [play].tsx:12 ~ query:', query.playID)
+  useEffect(() => {
+    if (query.playId) {
+      setPlayId(Number(query.playId))
+      reviewAverage.refetch()
+      reviewsByPlayId.refetch()
+    }
+  }, [query.playId])
 
   return (
     <>
@@ -63,22 +66,63 @@ const Play: NextPage = () => {
               </Card>
             </Center>
 
-            <ButtonGroup spacing="2">
-              <NextLink href={`/play/${play.id}`}>
-                <Button
-                  onClick={() => {
-                    console.log('')
-                  }}
-                >
-                  View Moment Details
-                </Button>
-              </NextLink>
-            </ButtonGroup>
+            <div>
+              <Rating
+                size={6}
+                icon="star"
+                scale={5}
+                fillColor="gold"
+                strokeColor="grey"
+                viewOnly
+                viewRating={
+                  (reviewAverage.data && reviewAverage.data._avg.rating) || 0
+                }
+              />
+              {reviewAverage.data && reviewAverage.data._avg.rating} -{' '}
+              {reviewAverage.data && reviewAverage.data._count.rating} reviews
+            </div>
 
             <ReviewForm />
+
+            <Reviews />
           </VStack>
         )}
       </main>
+    </>
+  )
+}
+
+const Reviews: FC = () => {
+  const { reviewsByPlayId } = useDB()
+  return (
+    <>
+      {reviewsByPlayId.data &&
+        reviewsByPlayId.data.map((review) => (
+          <Center key={review.id}>
+            <Card maxW="sm">
+              <CardBody>
+                <Stack mt="6" spacing="3">
+                  <Heading size="md">{review.title}</Heading>
+                  <Text>
+                    {review.description} - {review.rating}
+                  </Text>
+
+                  <div>
+                    <Rating
+                      size={4}
+                      icon="star"
+                      scale={5}
+                      fillColor="gold"
+                      strokeColor="grey"
+                      viewOnly
+                      viewRating={review.rating}
+                    />
+                  </div>
+                </Stack>
+              </CardBody>
+            </Card>
+          </Center>
+        ))}
     </>
   )
 }

@@ -8,6 +8,8 @@ import {
   Button,
 } from '@chakra-ui/react'
 import Rating from '../shared/rating'
+import { useDB } from '@/libs/hooks/use-db'
+import { useStore } from '@/libs/store'
 
 export interface ReviewFormInput {
   rating: number
@@ -16,6 +18,9 @@ export interface ReviewFormInput {
 }
 
 export const ReviewForm: FC = () => {
+  const { createReview } = useDB()
+  const playId = useStore((state) => state.playId)
+
   const {
     handleSubmit,
     register,
@@ -23,22 +28,18 @@ export const ReviewForm: FC = () => {
     formState: { errors, isSubmitting },
   } = useForm<ReviewFormInput>()
 
-  const onSubmit: SubmitHandler<ReviewFormInput> = async (data, e) => {
+  const onSubmit: SubmitHandler<ReviewFormInput> = async (
+    { description, rating, title },
+    e
+  ) => {
     e?.preventDefault()
-    console.log(data)
+
+    createReview.mutate({ description, playId, rating, title })
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl isInvalid={!!errors.title}>
-        <Rating
-          size={48}
-          icon="star"
-          scale={5}
-          fillColor="gold"
-          strokeColor="grey"
-          setValue={setValue}
-        />
         <FormLabel htmlFor="title">Title</FormLabel>
         <Input
           id="title"
@@ -66,6 +67,16 @@ export const ReviewForm: FC = () => {
           {errors.description && errors.description.message}
         </FormErrorMessage>
       </FormControl>
+      <div>
+        <Rating
+          size={8}
+          icon="star"
+          scale={5}
+          fillColor="gold"
+          strokeColor="grey"
+          setValue={setValue}
+        />
+      </div>
       <Button mt={4} colorScheme="teal" isLoading={isSubmitting} type="submit">
         Submit
       </Button>
