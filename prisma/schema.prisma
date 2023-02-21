@@ -51,12 +51,14 @@ model User {
 }
 
 model Review {
-    id          Int     @id @default(autoincrement())
+    id          Int      @id @default(autoincrement())
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
     rating      Int
     title       String?
     description String?
-    playId      Int     @unique
-    user        User    @relation(fields: [userId], references: [id])
+    playId      Int
+    user        User     @relation(fields: [userId], references: [id])
     userId      String
 
     @@index([userId])
