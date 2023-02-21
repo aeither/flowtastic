@@ -1,3 +1,15 @@
+export type ImageType =
+  | 'capture_Hero_Black'
+  | 'capture_Front_Black'
+  | 'capture_Legal_Black'
+  | 'capture_Details_Black'
+
+export type VideoType =
+  | 'capture_Animated_Video_Popout_Black'
+  | 'capture_Animated_Video_Idle_Black'
+
+export type Language = 'default' | 'es'
+
 export interface EditionData {
   id: string
   seriesID: string
@@ -50,9 +62,9 @@ export interface SetData {
 }
 
 export interface SeriesData {
-  id:     string;
-  name:   string;
-  active: boolean;
+  id: string
+  name: string
+  active: boolean
 }
 
 export interface PlayData {
