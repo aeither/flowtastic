@@ -1,6 +1,8 @@
 import React, { ForwardedRef, useState } from 'react'
 import { Box, Button, Icon, IconButton, Stack, Text } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons'
+import { UseFormSetValue } from 'react-hook-form'
+import { ReviewFormInput } from '../home/review-form'
 
 interface RatingProps {
   size: number
@@ -8,11 +10,12 @@ interface RatingProps {
   scale: number
   fillColor: string
   strokeColor: string
+  setValue: UseFormSetValue<ReviewFormInput>
 }
 
 const Rating = React.forwardRef(
   (
-    { size, icon, scale, fillColor, strokeColor }: RatingProps,
+    { size, icon, scale, fillColor, strokeColor, setValue }: RatingProps,
     ref: ForwardedRef<HTMLInputElement>
   ) => {
     const [rating, setRating] = useState(0)
@@ -25,6 +28,7 @@ const Rating = React.forwardRef(
           setRating(0)
         } else {
           setRating(idx)
+          setValue('rating', idx)
         }
       }
     }

@@ -1,3 +1,4 @@
+import { ReviewForm } from '@/components/home/review-form'
 import Rating from '@/components/shared/rating'
 import { api } from '@/libs/api'
 import { useFlow } from '@/libs/hooks/use-flow'
@@ -74,13 +75,7 @@ const Play: NextPage = () => {
               </NextLink>
             </ButtonGroup>
 
-            <Rating
-              size={48}
-              icon="star"
-              scale={5}
-              fillColor="gold"
-              strokeColor="grey"
-            />
+            <ReviewForm />
           </VStack>
         )}
       </main>
