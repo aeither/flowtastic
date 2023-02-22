@@ -60,20 +60,13 @@ const MediaSlider: FC<{ play: PlayData }> = ({ play }) => {
         ))}
         {[0, 1].map((id) => (
           <SwiperSlide key={id}>
-            <Image
-              src={'https://cdn-icons-png.flaticon.com/512/1110/1110736.png'}
-              alt={play.metadata.PlayDataID}
-              borderRadius="lg"
-              cursor={'pointer'}
-              p={8}
-              onClick={() =>
-                console.log(
-                  getPlayVideo(
-                    play.metadata.PlayDataID,
-                    VIDEO_MEDIA_TYPES[id]! as VideoType
-                  )
-                )
-              }
+            <MediaModal
+              playId={play.metadata.PlayDataID}
+              srcUrl={'https://cdn-icons-png.flaticon.com/512/1110/1110736.png'}
+              videolUrl={getPlayVideo(
+                play.metadata.PlayDataID,
+                VIDEO_MEDIA_TYPES[id]! as VideoType
+              )}
             />
           </SwiperSlide>
         ))}
