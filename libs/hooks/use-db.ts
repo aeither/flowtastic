@@ -1,27 +1,32 @@
 import { api } from '../api'
 import toast from 'react-hot-toast'
 import { useStore } from '../store'
+import { useSession } from 'next-auth/react'
 
-export function useDB() {
-  const playId = useStore((state) => state.playId)
+export function useDB({ playId }: { playId?: number }) {
+  // const playId = useStore((state) => state.playId)
+  const { data: session } = useSession()
 
   const reviewAverage = api.db.reviewAverage.useQuery(
-    { playId },
+    { playId: playId! },
     {
+      enabled: !!playId,
       staleTime: Infinity,
       cacheTime: Infinity,
     }
   )
 
   const reviewsByPlayId = api.db.reviewsByPlayId.useQuery(
-    { playId },
+    { playId: playId! },
     {
+      enabled: !!playId,
       staleTime: Infinity,
       cacheTime: Infinity,
     }
   )
 
   const userAddress = api.db.userAddress.useQuery(undefined, {
+    enabled: (session && !!session.user.id) || false,
     staleTime: Infinity,
     cacheTime: Infinity,
   })
@@ -34,8 +39,10 @@ export function useDB() {
       toast.remove()
       toast.success('Success')
 
-      reviewAverage.refetch()
-      reviewsByPlayId.refetch()
+      if (playId) {
+        reviewAverage.refetch()
+        reviewsByPlayId.refetch()
+      }
     },
     onError: ({ data }) => {
       toast.remove()
@@ -54,9 +61,6 @@ export function useDB() {
     onSuccess() {
       toast.remove()
       toast.success('Success')
-
-      reviewAverage.refetch()
-      reviewsByPlayId.refetch()
     },
     onError: ({ data }) => {
       toast.remove()
