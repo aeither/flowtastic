@@ -2,8 +2,8 @@ import { ReviewForm } from '@/components/home/review-form'
 import Rating from '@/components/shared/rating'
 import { useReviewAverage, useReviewsByPlayId } from '@/libs/hooks/use-db'
 import { usePlayData } from '@/libs/hooks/use-flow'
-import { ImageType, PlayData } from '@/libs/types'
-import { getPlayImage } from '@/libs/utils/helpers'
+import { ImageType, PlayData, VideoType } from '@/libs/types'
+import { getPlayImage, getPlayVideo } from '@/libs/utils/helpers'
 import {
   Card,
   CardBody,
@@ -20,11 +20,15 @@ import { FC } from 'react'
 import { Navigation, Pagination } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
-const MEDIA_TYPES = [
+const IMAGE_MEDIA_TYPES = [
   'capture_Hero_Black',
   'capture_Front_Black',
   'capture_Legal_Black',
   'capture_Details_Black',
+]
+const VIDEO_MEDIA_TYPES = [
+  'capture_Animated_Video_Popout_Black',
+  'capture_Animated_Video_Idle_Black',
 ]
 
 const MediaSlider: FC<{ play: PlayData }> = ({ play }) => {
@@ -42,15 +46,34 @@ const MediaSlider: FC<{ play: PlayData }> = ({ play }) => {
         onSlideChange={() => console.log('slide change')}
         onSwiper={(swiper) => console.log(swiper)}
       >
-        {[0, 1, 2, 3, 4, 5].map((id) => (
+        {[0, 1, 2, 3].map((id) => (
           <SwiperSlide key={id}>
             <Image
               src={getPlayImage(
                 play.metadata.PlayDataID,
-                MEDIA_TYPES[id]! as ImageType
+                IMAGE_MEDIA_TYPES[id]! as ImageType
               )}
               alt={play.metadata.PlayDataID}
               borderRadius="lg"
+            />
+          </SwiperSlide>
+        ))}
+        {[0, 1].map((id) => (
+          <SwiperSlide key={id}>
+            <Image
+              src={'https://cdn-icons-png.flaticon.com/512/1110/1110736.png'}
+              alt={play.metadata.PlayDataID}
+              borderRadius="lg"
+              cursor={'pointer'}
+              p={8}
+              onClick={() =>
+                console.log(
+                  getPlayVideo(
+                    play.metadata.PlayDataID,
+                    VIDEO_MEDIA_TYPES[id]! as VideoType
+                  )
+                )
+              }
             />
           </SwiperSlide>
         ))}
