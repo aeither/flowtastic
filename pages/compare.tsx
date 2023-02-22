@@ -1,6 +1,6 @@
 import Rating from '@/components/shared/rating'
-import { useDB } from '@/libs/hooks/use-db'
-import { useFlow } from '@/libs/hooks/use-flow'
+import { useDB, useReviewAverage } from '@/libs/hooks/use-db'
+import { useFlow, usePlayData } from '@/libs/hooks/use-flow'
 import { useStore } from '@/libs/store'
 import { getPlayImage } from '@/libs/utils/helpers'
 import {
@@ -24,11 +24,13 @@ import { FC } from 'react'
 
 export const MomentA: FC = () => {
   // get all editions for select
-  const { allPlays, playData } = useFlow({})
+  const { allPlays } = useFlow()
   const setPlayId = useStore((state) => state.setPlayId)
   const playId = useStore((state) => state.playId)
-  const { reviewAverage } = useDB({ playId })
-
+  const playData = usePlayData({ playId })
+  const reviewAverage = useReviewAverage({
+    playId,
+  })
   // components to show media
   // components to show details
   return (
@@ -108,7 +110,7 @@ export const MomentA: FC = () => {
 }
 
 const Portfolio: NextPage = () => {
-  const { userAddress, addAddress } = useDB({})
+  const { userAddress, addAddress } = useDB()
 
   return (
     <>

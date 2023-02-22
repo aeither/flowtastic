@@ -1,7 +1,6 @@
 import Rating from '@/components/shared/rating'
-import { useDB } from '@/libs/hooks/use-db'
+import { useReviewAverage } from '@/libs/hooks/use-db'
 import { useFlow } from '@/libs/hooks/use-flow'
-import { useStore } from '@/libs/store'
 import { getPlayImage } from '@/libs/utils/helpers'
 import {
   Button,
@@ -22,7 +21,9 @@ import NextLink from 'next/link'
 import { FC } from 'react'
 
 export const CardRating: FC<{ playId: number }> = ({ playId }) => {
-  const { reviewAverage } = useDB({ playId })
+  const reviewAverage = useReviewAverage({
+    playId,
+  })
 
   return (
     <>
@@ -46,36 +47,7 @@ export const CardRating: FC<{ playId: number }> = ({ playId }) => {
 }
 
 const Home: NextPage = () => {
-  const {
-    medias,
-    allPlays,
-    collectionIDs,
-    nftMetadata,
-    properties,
-    playData,
-    traits,
-    allEditions,
-    allSeriesNames,
-    seriesData,
-    momentProperties,
-  } = useFlow({ momentNFT: '802448578', targetAddress: '0xcd2983e6eac4b9b9' })
-  console.log(
-    '🚀 ~ file: home.tsx:37 ~ momentProperties:',
-    momentProperties.data
-  )
-  // console.log('🚀 ~ file: scripts.tsx:34 ~ seriesData:', seriesData.data)
-  // console.log(
-  //   '🚀 ~ file: scripts.tsx:33 ~ allSeriesNames:',
-  //   allSeriesNames.data
-  // )
-  // console.log('🚀 ~ file: scripts.tsx:32 ~ allEditions:', allEditions.data)
-  console.log('🚀 ~ file: scripts.tsx:32 ~ traits:', traits.data)
-  // console.log('🚀 ~ file: scripts.tsx:23 ~ playData:', playData.data)
-  // console.log('🚀 ~ file: scripts.tsx:23 ~ properties:', properties.data)
-  // console.log('🚀 ~ file: scripts.tsx:23 ~ nftMetadata:', nftMetadata.data)
-  // console.log('🚀 ~ file: scripts.tsx:23 ~ collectionIDs:', collectionIDs.data)
-  // console.log('🚀 ~ file: scripts.tsx:23 ~ allPlays:', allPlays.data)
-  // console.log('🚀 ~ file: scripts.tsx:23 ~ medias:', medias.data)
+  const { allPlays } = useFlow()
 
   return (
     <>

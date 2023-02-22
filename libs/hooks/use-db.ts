@@ -1,12 +1,13 @@
-import { api } from '../api'
-import toast from 'react-hot-toast'
-import { useStore } from '../store'
 import { useSession } from 'next-auth/react'
+import { useState } from 'react'
+import toast from 'react-hot-toast'
+import { api } from '../api'
 
-export function useDB({ playId }: { playId?: number }) {
-  // const playId = useStore((state) => state.playId)
-  const { data: session } = useSession()
-
+export const useReviewAverage = ({
+  playId,
+}: {
+  playId: number | undefined
+}) => {
   const reviewAverage = api.db.reviewAverage.useQuery(
     { playId: playId! },
     {
@@ -15,7 +16,14 @@ export function useDB({ playId }: { playId?: number }) {
       cacheTime: Infinity,
     }
   )
+  return reviewAverage
+}
 
+export const useReviewsByPlayId = ({
+  playId,
+}: {
+  playId: number | undefined
+}) => {
   const reviewsByPlayId = api.db.reviewsByPlayId.useQuery(
     { playId: playId! },
     {
@@ -24,6 +32,14 @@ export function useDB({ playId }: { playId?: number }) {
       cacheTime: Infinity,
     }
   )
+  return reviewsByPlayId
+}
+
+export function useDB() {
+  const { data: session } = useSession()
+  const [playId, setPlayId] = useState<number>()
+  const reviewAverage = useReviewAverage({ playId })
+  const reviewsByPlayId = useReviewsByPlayId({ playId })
 
   const userAddress = api.db.userAddress.useQuery(undefined, {
     enabled: (session && !!session.user.id) || false,
@@ -35,7 +51,10 @@ export function useDB({ playId }: { playId?: number }) {
     onMutate() {
       toast.loading('Loading...')
     },
-    onSuccess() {
+    onSuccess(data, variables, context) {
+      const { playId: _playId } = variables
+      setPlayId(_playId)
+
       toast.remove()
       toast.success('Success')
 
@@ -72,9 +91,7 @@ export function useDB({ playId }: { playId?: number }) {
     },
   })
   return {
-    reviewAverage,
     createReview,
-    reviewsByPlayId,
     addAddress,
     userAddress,
   }

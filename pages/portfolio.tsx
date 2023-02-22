@@ -1,5 +1,8 @@
 import { useDB } from '@/libs/hooks/use-db'
-import { useFlow } from '@/libs/hooks/use-flow'
+import {
+  useCollectionIDs, useMomentProperties,
+  useNftMetadata
+} from '@/libs/hooks/use-flow'
 import { useStore } from '@/libs/store'
 import {
   Button,
@@ -12,7 +15,7 @@ import {
   Image,
   Stack,
   Text,
-  VStack,
+  VStack
 } from '@chakra-ui/react'
 import { useAuthentication, verifyUserSignatures } from '@flowity/react'
 import { type NextPage } from 'next'
@@ -22,10 +25,14 @@ import { FC } from 'react'
 const MESSAGE = Buffer.from('Use as Portfolio wallet').toString('hex')
 
 export const Moment: FC<{ id: string }> = ({ id }) => {
-  const { userAddress } = useDB({})
-  const { momentProperties, nftMetadata } = useFlow({
+  const { userAddress } = useDB()
+  const momentProperties = useMomentProperties({
     momentNFT: id,
-    targetAddress: userAddress.data && (userAddress.data.address as any),
+    targetAddress: userAddress.data && userAddress.data.address,
+  })
+  const nftMetadata = useNftMetadata({
+    momentNFT: id,
+    targetAddress: userAddress.data && userAddress.data.address,
   })
   const setPlayId = useStore((state) => state.setPlayId)
 
@@ -76,9 +83,9 @@ export const Moment: FC<{ id: string }> = ({ id }) => {
 const Portfolio: NextPage = () => {
   const { login, isLoggedIn, isReady, logout, user, signUserMessage } =
     useAuthentication()
-  const { userAddress, addAddress } = useDB({})
-  const { collectionIDs } = useFlow({
-    targetAddress: userAddress.data && (userAddress.data.address as any),
+  const { userAddress, addAddress } = useDB()
+  const collectionIDs = useCollectionIDs({
+    targetAddress: userAddress.data && userAddress.data.address,
   })
   console.log('🚀 ~ file: portfolio.tsx:17 ~ collectionIDs:', collectionIDs)
 

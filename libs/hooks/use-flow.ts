@@ -1,56 +1,42 @@
 import {
   EditionData,
-  Metadata,
   SeriesData,
   type NFTMetadataDisplay,
   type NFTMetadataMedias,
   type PlayData,
   type SetData,
 } from '@/libs/types'
-import {
-  createClient,
-  FlowProvider,
-  networks,
-  useScript,
-  useAccount,
-} from '@flowity/react'
-import { useEffect, type FC } from 'react'
+import { useScript } from '@flowity/react'
 import { useStore } from '../store'
 
-export function useFlow({
+/**
+ * /////////////////////////////////////////////////////////////////////
+ * /////////////////////////////////////////////////////////////////////
+ */
+export const useMedias = ({
   momentNFT,
   targetAddress,
 }: {
-  momentNFT?: string
-  targetAddress?: string
-}) {
-  // const targetAddress = useStore((state) => state.targetAddress)
-  // const momentNFT = useStore((state) => state.momentNFT)
-  const playId = useStore((state) => state.playId)
-  const golazosSetName = useStore((state) => state.golazosSetName)
-  const seriesName = useStore((state) => state.seriesName)
-
-  /**
-   * /////////////////////////////////////////////////////////////////////
-   * /////////////////////////////////////////////////////////////////////
-   */
+  momentNFT: string
+  targetAddress: string
+}) => {
   const CADENCE_SCRIPT_NFTMetadataMedias = `
-    import Golazos from 0xGOLAZOSADDRESS
-    import MetadataViews from 0xMETADATAVIEWSADDRESS
-    
-    pub fun main(address: Address, id: UInt64): MetadataViews.Medias {
-        let account = getAccount(address)
-    
-        let collectionRef = account.getCapability(Golazos.CollectionPublicPath)
-                .borrow<&{Golazos.MomentNFTCollectionPublic}>()
-                ?? panic("Could not borrow capability from public collection")
-    
-        let nft = collectionRef.borrowMomentNFT(id: id)
-                ?? panic("Couldn't borrow momentNFT")
-    
-        return nft.resolveView(Type<MetadataViews.Medias>())! as! MetadataViews.Medias
-    }
-    `
+      import Golazos from 0xGOLAZOSADDRESS
+      import MetadataViews from 0xMETADATAVIEWSADDRESS
+      
+      pub fun main(address: Address, id: UInt64): MetadataViews.Medias {
+          let account = getAccount(address)
+      
+          let collectionRef = account.getCapability(Golazos.CollectionPublicPath)
+                  .borrow<&{Golazos.MomentNFTCollectionPublic}>()
+                  ?? panic("Could not borrow capability from public collection")
+      
+          let nft = collectionRef.borrowMomentNFT(id: id)
+                  ?? panic("Couldn't borrow momentNFT")
+      
+          return nft.resolveView(Type<MetadataViews.Medias>())! as! MetadataViews.Medias
+      }
+      `
   const medias = useScript<NFTMetadataMedias>({
     cadence: CADENCE_SCRIPT_NFTMetadataMedias,
     args: (arg, t) => [arg(targetAddress, t.Address), arg(momentNFT, t.UInt64)],
@@ -60,10 +46,20 @@ export function useFlow({
       cacheTime: Infinity,
     },
   })
-  /**
-   * /////////////////////////////////////////////////////////////////////
-   * /////////////////////////////////////////////////////////////////////
-   */
+  return medias
+}
+
+/**
+ * /////////////////////////////////////////////////////////////////////
+ * /////////////////////////////////////////////////////////////////////
+ */
+export const useTraits = ({
+  momentNFT,
+  targetAddress,
+}: {
+  momentNFT: string
+  targetAddress: string
+}) => {
   const CADENCE_SCRIPT_TRAITS = `
   import Golazos from 0xGOLAZOSADDRESS
   import MetadataViews from 0xMETADATAVIEWSADDRESS
@@ -90,10 +86,19 @@ export function useFlow({
       cacheTime: Infinity,
     },
   })
-  /**
-   * /////////////////////////////////////////////////////////////////////
-   * /////////////////////////////////////////////////////////////////////
-   */
+  return traits
+}
+/**
+ * /////////////////////////////////////////////////////////////////////
+ * /////////////////////////////////////////////////////////////////////
+ */
+export const useProperties = ({
+  momentNFT,
+  targetAddress,
+}: {
+  momentNFT: string
+  targetAddress: string
+}) => {
   const CADENCE_SCRIPT_PROPERTIES = `
   import NonFungibleToken from 0xNONFUNGIBLETOKENADDRESS
   import Golazos from 0xGOLAZOSADDRESS
@@ -120,10 +125,17 @@ export function useFlow({
       staleTime: Infinity,
     },
   })
-  /**
-   * /////////////////////////////////////////////////////////////////////
-   * /////////////////////////////////////////////////////////////////////
-   */
+  return properties
+}
+/**
+ * /////////////////////////////////////////////////////////////////////
+ * /////////////////////////////////////////////////////////////////////
+ */
+export const useCollectionIDs = ({
+  targetAddress,
+}: {
+  targetAddress: string | undefined | null
+}) => {
   const CADENCE_SCRIPT_COLLECTION_IDS = `
   import NonFungibleToken from 0xNONFUNGIBLETOKENADDRESS
   import Golazos from 0xGOLAZOSADDRESS
@@ -146,10 +158,19 @@ export function useFlow({
       staleTime: Infinity,
     },
   })
-  /**
-   * /////////////////////////////////////////////////////////////////////
-   * /////////////////////////////////////////////////////////////////////
-   */
+  return collectionIDs
+}
+/**
+ * /////////////////////////////////////////////////////////////////////
+ * /////////////////////////////////////////////////////////////////////
+ */
+export const useMomentProperties = ({
+  momentNFT,
+  targetAddress,
+}: {
+  momentNFT: string
+  targetAddress: string | null | undefined
+}) => {
   const CADENCE_SCRIPT_MOMENT_PROPERTIES = `
   import NonFungibleToken from 0xNONFUNGIBLETOKENADDRESS
   import Golazos from 0xGOLAZOSADDRESS
@@ -176,10 +197,19 @@ export function useFlow({
       staleTime: Infinity,
     },
   })
-  /**
-   * /////////////////////////////////////////////////////////////////////
-   * /////////////////////////////////////////////////////////////////////
-   */
+  return momentProperties
+}
+/**
+ * /////////////////////////////////////////////////////////////////////
+ * /////////////////////////////////////////////////////////////////////
+ */
+export const useNftMetadata = ({
+  momentNFT,
+  targetAddress,
+}: {
+  momentNFT: string
+  targetAddress: string | null | undefined
+}) => {
   const CADENCE_SCRIPT_NFTMetadataDisplay = `
   import Golazos from 0xGOLAZOSADDRESS
   import MetadataViews from 0xMETADATAVIEWSADDRESS
@@ -206,25 +236,39 @@ export function useFlow({
       staleTime: Infinity,
     },
   })
-  /**
-   * /////////////////////////////////////////////////////////////////////
-   * /////////////////////////////////////////////////////////////////////
-   */
+  return nftMetadata
+}
+/**
+ * /////////////////////////////////////////////////////////////////////
+ * /////////////////////////////////////////////////////////////////////
+ */
+export const usePlayData = ({ playId }: { playId: number | undefined }) => {
   const CADENCE_SCRIPT_PLAY = `
-  import Golazos from 0xGOLAZOSADDRESS
-
-  pub fun main(id: UInt64): Golazos.PlayData? {
-      return Golazos.getPlayData(id: id)
-  }
-  `
+    import Golazos from 0xGOLAZOSADDRESS
+  
+    pub fun main(id: UInt64): Golazos.PlayData? {
+        return Golazos.getPlayData(id: id)
+    }
+    `
   const playData = useScript<PlayData>({
     cadence: CADENCE_SCRIPT_PLAY,
     args: (arg, t) => [arg(playId, t.UInt64)],
     options: {
+      enabled: !!playId,
       cacheTime: Infinity,
       staleTime: Infinity,
     },
   })
+  return playData
+}
+
+export function useFlow() {
+  // const targetAddress = useStore((state) => state.targetAddress)
+  // const momentNFT = useStore((state) => state.momentNFT)
+  const playId = useStore((state) => state.playId)
+  const golazosSetName = useStore((state) => state.golazosSetName)
+  const seriesName = useStore((state) => state.seriesName)
+
   /**
    * /////////////////////////////////////////////////////////////////////
    * /////////////////////////////////////////////////////////////////////
@@ -358,23 +402,23 @@ export function useFlow({
   /**
    * Effects
    */
-  useEffect(() => {
-    void playData.refetch()
-  }, [playId])
+  // useEffect(() => {
+  //   void playData.refetch()
+  // }, [playId])
 
   return {
-    medias, // MetadataViews: user's moment NFT medias
-    properties, // MetadataViews: user's moment NFT properties
-    collectionIDs, // Moment: list all user moment NFT IDs
-    momentProperties, // [nft.id, nft.editionID, nft.serialNumber, nft.mintingDate]
-    nftMetadata, // MetadataViews: user's nft Metadata
+    // useMedias, // MetadataViews: user's moment NFT medias
+    // useProperties, // MetadataViews: user's moment NFT properties
+    // useCollectionIDs, // Moment: list all user moment NFT IDs
+    // useMomentProperties, // [nft.id, nft.editionID, nft.serialNumber, nft.mintingDate]
+    // useNftMetadata, // MetadataViews: user's nft Metadata
+    // usePlayData, // Plays: Details
+    // useTraits,
     allPlays, // Plays: Last X plays
-    playData, // Plays: Details
     allSetNames, // Sets: list by content types
     setData, // Sets: single set data
     allSeriesNames,
     seriesData,
     allEditions,
-    traits,
   }
 }

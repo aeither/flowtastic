@@ -1,8 +1,7 @@
 import { ReviewForm } from '@/components/home/review-form'
 import Rating from '@/components/shared/rating'
-import { useDB } from '@/libs/hooks/use-db'
-import { useFlow } from '@/libs/hooks/use-flow'
-import { useStore } from '@/libs/store'
+import { useReviewAverage, useReviewsByPlayId } from '@/libs/hooks/use-db'
+import { usePlayData } from '@/libs/hooks/use-flow'
 import { ImageType, PlayData } from '@/libs/types'
 import { getPlayImage } from '@/libs/utils/helpers'
 import {
@@ -17,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { type NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 import { Navigation, Pagination } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -61,7 +60,7 @@ const MediaSlider: FC<{ play: PlayData }> = ({ play }) => {
 }
 
 const Reviews: FC<{ playId: number | undefined }> = ({ playId }) => {
-  const { reviewsByPlayId } = useDB({ playId })
+  const reviewsByPlayId = useReviewsByPlayId({ playId })
   return (
     <>
       {reviewsByPlayId.data &&
@@ -98,10 +97,11 @@ const Reviews: FC<{ playId: number | undefined }> = ({ playId }) => {
 const Play: NextPage = () => {
   const { query } = useRouter()
   const playId = Number(query.playId) as number | undefined
-  const { reviewAverage, reviewsByPlayId } = useDB({
+  const reviewAverage = useReviewAverage({
     playId,
   })
-  const { playData } = useFlow({})
+
+  const playData = usePlayData({ playId })
   const play = playData.data
 
   return (
