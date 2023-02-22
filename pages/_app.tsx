@@ -9,6 +9,9 @@ import { type Session } from 'next-auth'
 import { SessionProvider } from 'next-auth/react'
 import { type AppType } from 'next/app'
 import { Toaster } from 'react-hot-toast'
+import "swiper/css"
+import "swiper/css/navigation"
+import "swiper/css/pagination"
 
 const client = createClient({
   fclConfig: {

@@ -3,6 +3,7 @@ import Rating from '@/components/shared/rating'
 import { useDB } from '@/libs/hooks/use-db'
 import { useFlow } from '@/libs/hooks/use-flow'
 import { useStore } from '@/libs/store'
+import { ImageType, PlayData } from '@/libs/types'
 import { getPlayImage } from '@/libs/utils/helpers'
 import {
   Card,
@@ -17,21 +18,91 @@ import {
 import { type NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { FC, useEffect } from 'react'
+import { Navigation, Pagination } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
+
+const MEDIA_TYPES = [
+  'capture_Hero_Black',
+  'capture_Front_Black',
+  'capture_Legal_Black',
+  'capture_Details_Black',
+]
+
+const MediaSlider: FC<{ play: PlayData }> = ({ play }) => {
+  return (
+    <>
+      <Swiper
+        modules={[Pagination, Navigation]}
+        pagination={{
+          dynamicBullets: true,
+          clickable: true,
+        }}
+        navigation={true}
+        spaceBetween={500}
+        slidesPerView={1}
+        onSlideChange={() => console.log('slide change')}
+        onSwiper={(swiper) => console.log(swiper)}
+      >
+        {[0, 1, 2, 3, 4, 5].map((id) => (
+          <SwiperSlide key={id}>
+            <Image
+              src={getPlayImage(
+                play.metadata.PlayDataID,
+                MEDIA_TYPES[id]! as ImageType
+              )}
+              alt={play.metadata.PlayDataID}
+              borderRadius="lg"
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </>
+  )
+}
+
+const Reviews: FC<{ playId: number | undefined }> = ({ playId }) => {
+  const { reviewsByPlayId } = useDB({ playId })
+  return (
+    <>
+      {reviewsByPlayId.data &&
+        reviewsByPlayId.data.map((review) => (
+          <Center key={review.id}>
+            <Card maxW="sm">
+              <CardBody>
+                <Stack mt="6" spacing="3">
+                  <Heading size="md">{review.title}</Heading>
+                  <Text>
+                    {review.description} - {review.rating}
+                  </Text>
+
+                  <div>
+                    <Rating
+                      size={4}
+                      icon="star"
+                      scale={5}
+                      fillColor="gold"
+                      strokeColor="grey"
+                      viewOnly
+                      viewRating={review.rating}
+                    />
+                  </div>
+                </Stack>
+              </CardBody>
+            </Card>
+          </Center>
+        ))}
+    </>
+  )
+}
 
 const Play: NextPage = () => {
-  const setPlayId = useStore((state) => state.setPlayId)
-  const { reviewAverage, reviewsByPlayId } = useDB({})
   const { query } = useRouter()
+  const playId = Number(query.playId) as number | undefined
+  const { reviewAverage, reviewsByPlayId } = useDB({
+    playId,
+  })
   const { playData } = useFlow({})
   const play = playData.data
-
-  useEffect(() => {
-    if (query.playId) {
-      setPlayId(Number(query.playId))
-      reviewAverage.refetch()
-      reviewsByPlayId.refetch()
-    }
-  }, [query.playId])
 
   return (
     <>
@@ -41,14 +112,7 @@ const Play: NextPage = () => {
             <Center>
               <Card maxW="sm">
                 <CardBody>
-                  <Image
-                    src={getPlayImage(
-                      play.metadata.PlayDataID,
-                      'capture_Hero_Black'
-                    )}
-                    alt={play.metadata.PlayDataID}
-                    borderRadius="lg"
-                  />
+                  <MediaSlider play={play} />
                   <Stack mt="6" spacing="3">
                     <Heading size="md">
                       {`${play.metadata.PlayerFirstName} ${play.metadata.PlayerLastName}`}
@@ -84,45 +148,10 @@ const Play: NextPage = () => {
 
             <ReviewForm />
 
-            <Reviews />
+            <Reviews playId={playId} />
           </VStack>
         )}
       </main>
-    </>
-  )
-}
-
-const Reviews: FC = () => {
-  const { reviewsByPlayId } = useDB({})
-  return (
-    <>
-      {reviewsByPlayId.data &&
-        reviewsByPlayId.data.map((review) => (
-          <Center key={review.id}>
-            <Card maxW="sm">
-              <CardBody>
-                <Stack mt="6" spacing="3">
-                  <Heading size="md">{review.title}</Heading>
-                  <Text>
-                    {review.description} - {review.rating}
-                  </Text>
-
-                  <div>
-                    <Rating
-                      size={4}
-                      icon="star"
-                      scale={5}
-                      fillColor="gold"
-                      strokeColor="grey"
-                      viewOnly
-                      viewRating={review.rating}
-                    />
-                  </div>
-                </Stack>
-              </CardBody>
-            </Card>
-          </Center>
-        ))}
     </>
   )
 }
