@@ -1,3 +1,4 @@
+import { MediaModal } from '@/components/home/media-modal'
 import { ReviewForm } from '@/components/home/review-form'
 import Rating from '@/components/shared/rating'
 import { useReviewAverage, useReviewsByPlayId } from '@/libs/hooks/use-db'
@@ -48,13 +49,12 @@ const MediaSlider: FC<{ play: PlayData }> = ({ play }) => {
       >
         {[0, 1, 2, 3].map((id) => (
           <SwiperSlide key={id}>
-            <Image
-              src={getPlayImage(
+            <MediaModal
+              playId={play.metadata.PlayDataID}
+              srcUrl={getPlayImage(
                 play.metadata.PlayDataID,
                 IMAGE_MEDIA_TYPES[id]! as ImageType
               )}
-              alt={play.metadata.PlayDataID}
-              borderRadius="lg"
             />
           </SwiperSlide>
         ))}
