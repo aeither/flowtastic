@@ -37,7 +37,28 @@ export function useDB() {
       if (data?.code === 'UNAUTHORIZED') {
         toast.error('Require sign in')
       } else {
-        toast.error('createReview error')
+        toast.error('mutation error')
+      }
+    },
+  })
+
+  const addAddress = api.db.addAddress.useMutation({
+    onMutate() {
+      toast.loading('Loading...')
+    },
+    onSuccess() {
+      toast.remove()
+      toast.success('Success')
+
+      reviewAverage.refetch()
+      reviewsByPlayId.refetch()
+    },
+    onError: ({ data }) => {
+      toast.remove()
+      if (data?.code === 'UNAUTHORIZED') {
+        toast.error('Require sign in')
+      } else {
+        toast.error('mutation error')
       }
     },
   })
@@ -45,5 +66,6 @@ export function useDB() {
     reviewAverage,
     createReview,
     reviewsByPlayId,
+    addAddress,
   }
 }
