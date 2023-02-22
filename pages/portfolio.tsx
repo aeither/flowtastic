@@ -1,15 +1,20 @@
 import { type NextPage } from 'next'
 
 import { useDB } from '@/libs/hooks/use-db'
-import { Button } from '@chakra-ui/react'
+import { Button, Text, VStack } from '@chakra-ui/react'
 import { useAuthentication, verifyUserSignatures } from '@flowity/react'
+import { useFlow } from '@/libs/hooks/use-flow'
 
 const MESSAGE = Buffer.from('Use as Portfolio wallet').toString('hex')
 
 const Portfolio: NextPage = () => {
   const { login, isLoggedIn, isReady, logout, user, signUserMessage } =
     useAuthentication()
-  const { addAddress } = useDB()
+  const { userAddress, addAddress } = useDB()
+  const { collectionIDs } = useFlow({
+    targetAddress: userAddress.data && (userAddress.data.address as any),
+  })
+  console.log('🚀 ~ file: portfolio.tsx:17 ~ collectionIDs:', collectionIDs)
 
   // search another wallet
   //   const address = (user?.addr as `0x${string}`) || '0x123'
@@ -53,6 +58,15 @@ const Portfolio: NextPage = () => {
             Connect Wallet
           </Button>
         )}
+
+        {collectionIDs.data &&
+          collectionIDs.data.map((id) => (
+            <>
+              <VStack>
+                <Text>{id}</Text>
+              </VStack>
+            </>
+          ))}
       </main>
     </>
   )

@@ -21,6 +21,11 @@ export function useDB() {
     }
   )
 
+  const userAddress = api.db.userAddress.useQuery(undefined, {
+    staleTime: Infinity,
+    cacheTime: Infinity,
+  })
+
   const createReview = api.db.createReview.useMutation({
     onMutate() {
       toast.loading('Loading...')
@@ -67,5 +72,6 @@ export function useDB() {
     createReview,
     reviewsByPlayId,
     addAddress,
+    userAddress,
   }
 }

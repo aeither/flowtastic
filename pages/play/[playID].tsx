@@ -21,8 +21,8 @@ import { FC, useEffect } from 'react'
 const Play: NextPage = () => {
   const setPlayId = useStore((state) => state.setPlayId)
   const { reviewAverage, reviewsByPlayId } = useDB()
-  const { query, asPath } = useRouter()
-  const { playData } = useFlow()
+  const { query } = useRouter()
+  const { playData } = useFlow({})
   const play = playData.data
 
   useEffect(() => {

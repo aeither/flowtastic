@@ -43,6 +43,19 @@ export const dbRouter = createTRPCRouter({
       })
     }),
 
+  userAddress: protectedProcedure.query(async ({ ctx, input }) => {
+    const userId = ctx.session.user.id
+
+    return await ctx.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        address: true,
+      },
+    })
+  }),
+
   createReview: protectedProcedure
     .input(
       z.object({

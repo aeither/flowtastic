@@ -17,9 +17,15 @@ import {
 import { useEffect, type FC } from 'react'
 import { useStore } from '../store'
 
-export function useFlow() {
-  const targetAddress = useStore((state) => state.targetAddress)
-  const momentNFT = useStore((state) => state.momentNFT)
+export function useFlow({
+  momentNFT,
+  targetAddress,
+}: {
+  momentNFT?: string
+  targetAddress?: string
+}) {
+  // const targetAddress = useStore((state) => state.targetAddress)
+  // const momentNFT = useStore((state) => state.momentNFT)
   const playId = useStore((state) => state.playId)
   const golazosSetName = useStore((state) => state.golazosSetName)
   const seriesName = useStore((state) => state.seriesName)
@@ -49,6 +55,7 @@ export function useFlow() {
     cadence: CADENCE_SCRIPT_NFTMetadataMedias,
     args: (arg, t) => [arg(targetAddress, t.Address), arg(momentNFT, t.UInt64)],
     options: {
+      enabled: !!momentNFT && !!targetAddress,
       staleTime: Infinity,
       cacheTime: Infinity,
     },
@@ -78,6 +85,7 @@ export function useFlow() {
     cadence: CADENCE_SCRIPT_TRAITS,
     args: (arg, t) => [arg(targetAddress, t.Address), arg(momentNFT, t.UInt64)],
     options: {
+      enabled: !!momentNFT && !!targetAddress,
       staleTime: Infinity,
       cacheTime: Infinity,
     },
@@ -107,6 +115,7 @@ export function useFlow() {
     cadence: CADENCE_SCRIPT_PROPERTIES,
     args: (arg, t) => [arg(targetAddress, t.Address), arg(momentNFT, t.UInt64)],
     options: {
+      enabled: !!momentNFT && !!targetAddress,
       cacheTime: Infinity,
       staleTime: Infinity,
     },
@@ -132,6 +141,7 @@ export function useFlow() {
     cadence: CADENCE_SCRIPT_COLLECTION_IDS,
     args: (arg, t) => [arg(targetAddress, t.Address)],
     options: {
+      enabled: !!targetAddress,
       cacheTime: Infinity,
       staleTime: Infinity,
     },
@@ -161,6 +171,7 @@ export function useFlow() {
     cadence: CADENCE_SCRIPT_NFTMetadataDisplay,
     args: (arg, t) => [arg(targetAddress, t.Address), arg(momentNFT, t.UInt64)],
     options: {
+      enabled: !!momentNFT && !!targetAddress,
       cacheTime: Infinity,
       staleTime: Infinity,
     },

@@ -32,7 +32,7 @@ const Home: NextPage = () => {
     allEditions,
     allSeriesNames,
     seriesData,
-  } = useFlow()
+  } = useFlow({})
   // console.log('🚀 ~ file: scripts.tsx:34 ~ seriesData:', seriesData.data)
   // console.log(
   //   '🚀 ~ file: scripts.tsx:33 ~ allSeriesNames:',
