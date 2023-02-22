@@ -1,3 +1,5 @@
+import Rating from '@/components/shared/rating'
+import { useDB } from '@/libs/hooks/use-db'
 import { useFlow } from '@/libs/hooks/use-flow'
 import { useStore } from '@/libs/store'
 import { getPlayImage } from '@/libs/utils/helpers'
@@ -17,10 +19,33 @@ import {
 } from '@chakra-ui/react'
 import { type NextPage } from 'next'
 import NextLink from 'next/link'
+import { FC } from 'react'
+
+export const CardRating: FC<{ playId: number }> = ({ playId }) => {
+  const { reviewAverage } = useDB({ playId })
+
+  return (
+    <>
+      <div>
+        <Rating
+          size={6}
+          icon="star"
+          scale={5}
+          fillColor="gold"
+          strokeColor="grey"
+          viewOnly
+          viewRating={
+            (reviewAverage.data && reviewAverage.data._avg.rating) || 0
+          }
+        />
+        {(reviewAverage.data && reviewAverage.data._avg.rating) || 0} -{' '}
+        {reviewAverage.data && reviewAverage.data._count.rating} reviews
+      </div>
+    </>
+  )
+}
 
 const Home: NextPage = () => {
-  const setPlayId = useStore((state) => state.setPlayId)
-
   const {
     medias,
     allPlays,
@@ -81,6 +106,7 @@ const Home: NextPage = () => {
                       <Text>
                         {`${play.metadata.MatchHomeTeam} ${play.metadata.MatchHomeScore} - ${play.metadata.MatchAwayScore} ${play.metadata.MatchAwayTeam}`}
                       </Text>
+                      <CardRating playId={Number(play.id)} />
                     </Stack>
                   </CardBody>
                   <Divider />
@@ -90,9 +116,7 @@ const Home: NextPage = () => {
                         <Button
                           variant="solid"
                           colorScheme="blue"
-                          onClick={() => {
-                            setPlayId(Number(play.id))
-                          }}
+                          onClick={() => {}}
                         >
                           View Moment Details
                         </Button>

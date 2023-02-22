@@ -1,5 +1,3 @@
-import { type NextPage } from 'next'
-
 import { useDB } from '@/libs/hooks/use-db'
 import { useFlow } from '@/libs/hooks/use-flow'
 import { useStore } from '@/libs/store'
@@ -17,13 +15,14 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useAuthentication, verifyUserSignatures } from '@flowity/react'
+import { type NextPage } from 'next'
 import NextLink from 'next/link'
 import { FC } from 'react'
 
 const MESSAGE = Buffer.from('Use as Portfolio wallet').toString('hex')
 
 export const Moment: FC<{ id: string }> = ({ id }) => {
-  const { userAddress, addAddress } = useDB()
+  const { userAddress, addAddress } = useDB({})
   const { momentProperties, nftMetadata } = useFlow({
     momentNFT: id,
     targetAddress: userAddress.data && (userAddress.data.address as any),
@@ -77,7 +76,7 @@ export const Moment: FC<{ id: string }> = ({ id }) => {
 const Portfolio: NextPage = () => {
   const { login, isLoggedIn, isReady, logout, user, signUserMessage } =
     useAuthentication()
-  const { userAddress, addAddress } = useDB()
+  const { userAddress, addAddress } = useDB({})
   const { collectionIDs } = useFlow({
     targetAddress: userAddress.data && (userAddress.data.address as any),
   })

@@ -20,7 +20,7 @@ import { FC, useEffect } from 'react'
 
 const Play: NextPage = () => {
   const setPlayId = useStore((state) => state.setPlayId)
-  const { reviewAverage, reviewsByPlayId } = useDB()
+  const { reviewAverage, reviewsByPlayId } = useDB({})
   const { query } = useRouter()
   const { playData } = useFlow({})
   const play = playData.data
@@ -93,7 +93,7 @@ const Play: NextPage = () => {
 }
 
 const Reviews: FC = () => {
-  const { reviewsByPlayId } = useDB()
+  const { reviewsByPlayId } = useDB({})
   return (
     <>
       {reviewsByPlayId.data &&
