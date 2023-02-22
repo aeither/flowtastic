@@ -32,23 +32,25 @@ const Home: NextPage = () => {
     allEditions,
     allSeriesNames,
     seriesData,
-  } = useFlow({})
+    momentProperties,
+  } = useFlow({ momentNFT: '802448578', targetAddress: '0xcd2983e6eac4b9b9' })
+  console.log(
+    '🚀 ~ file: home.tsx:37 ~ momentProperties:',
+    momentProperties.data
+  )
   // console.log('🚀 ~ file: scripts.tsx:34 ~ seriesData:', seriesData.data)
   // console.log(
   //   '🚀 ~ file: scripts.tsx:33 ~ allSeriesNames:',
   //   allSeriesNames.data
   // )
   // console.log('🚀 ~ file: scripts.tsx:32 ~ allEditions:', allEditions.data)
-  // console.log('🚀 ~ file: scripts.tsx:32 ~ traits:', traits.data)
+  console.log('🚀 ~ file: scripts.tsx:32 ~ traits:', traits.data)
   // console.log('🚀 ~ file: scripts.tsx:23 ~ playData:', playData.data)
   // console.log('🚀 ~ file: scripts.tsx:23 ~ properties:', properties.data)
   // console.log('🚀 ~ file: scripts.tsx:23 ~ nftMetadata:', nftMetadata.data)
   // console.log('🚀 ~ file: scripts.tsx:23 ~ collectionIDs:', collectionIDs.data)
-  console.log('🚀 ~ file: scripts.tsx:23 ~ allPlays:', allPlays.data)
+  // console.log('🚀 ~ file: scripts.tsx:23 ~ allPlays:', allPlays.data)
   // console.log('🚀 ~ file: scripts.tsx:23 ~ medias:', medias.data)
-
-  // hello query cause refetch
-  // const hello = api.db.hello.useQuery({ text: 'from tRPC' })
 
   return (
     <>

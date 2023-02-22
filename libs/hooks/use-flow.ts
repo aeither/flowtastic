@@ -81,7 +81,7 @@ export function useFlow({
       return nft.resolveView(Type<MetadataViews.Traits>())! as! MetadataViews.Traits
   }
     `
-  const traits = useScript<Metadata>({
+  const traits = useScript<any>({
     cadence: CADENCE_SCRIPT_TRAITS,
     args: (arg, t) => [arg(targetAddress, t.Address), arg(momentNFT, t.UInt64)],
     options: {
@@ -142,6 +142,36 @@ export function useFlow({
     args: (arg, t) => [arg(targetAddress, t.Address)],
     options: {
       enabled: !!targetAddress,
+      cacheTime: Infinity,
+      staleTime: Infinity,
+    },
+  })
+  /**
+   * /////////////////////////////////////////////////////////////////////
+   * /////////////////////////////////////////////////////////////////////
+   */
+  const CADENCE_SCRIPT_MOMENT_PROPERTIES = `
+  import NonFungibleToken from 0xNONFUNGIBLETOKENADDRESS
+  import Golazos from 0xGOLAZOSADDRESS
+  
+  pub fun main(address: Address, id: UInt64): [AnyStruct] {
+      let account = getAccount(address)
+  
+      let collectionRef = account.getCapability(Golazos.CollectionPublicPath)
+          .borrow<&{Golazos.MomentNFTCollectionPublic}>()
+          ?? panic("Could not borrow capability from public collection")
+      
+      let nft = collectionRef.borrowMomentNFT(id: id)
+          ?? panic("Couldn't borrow momentNFT")
+  
+      return [nft.id, nft.editionID, nft.serialNumber, nft.mintingDate]
+  }
+  `
+  const momentProperties = useScript<string[]>({
+    cadence: CADENCE_SCRIPT_MOMENT_PROPERTIES,
+    args: (arg, t) => [arg(targetAddress, t.Address), arg(momentNFT, t.UInt64)],
+    options: {
+      enabled: !!momentNFT && !!targetAddress,
       cacheTime: Infinity,
       staleTime: Infinity,
     },
@@ -336,6 +366,7 @@ export function useFlow({
     medias, // MetadataViews: user's moment NFT medias
     properties, // MetadataViews: user's moment NFT properties
     collectionIDs, // Moment: list all user moment NFT IDs
+    momentProperties, // [nft.id, nft.editionID, nft.serialNumber, nft.mintingDate]
     nftMetadata, // MetadataViews: user's nft Metadata
     allPlays, // Plays: Last X plays
     playData, // Plays: Details
