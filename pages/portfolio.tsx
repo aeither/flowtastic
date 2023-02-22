@@ -22,7 +22,7 @@ import { FC } from 'react'
 const MESSAGE = Buffer.from('Use as Portfolio wallet').toString('hex')
 
 export const Moment: FC<{ id: string }> = ({ id }) => {
-  const { userAddress, addAddress } = useDB({})
+  const { userAddress } = useDB({})
   const { momentProperties, nftMetadata } = useFlow({
     momentNFT: id,
     targetAddress: userAddress.data && (userAddress.data.address as any),
@@ -89,8 +89,11 @@ const Portfolio: NextPage = () => {
   return (
     <>
       <main>
-        <p>hello world</p>
-
+        <Text>
+          Current associated address:{' '}
+          {userAddress.data && userAddress.data.address}
+        </Text>
+        <Text>Connect to add or update address</Text>
         {isLoggedIn ? (
           <>
             <Button
@@ -111,9 +114,8 @@ const Portfolio: NextPage = () => {
                 }
               }}
             >
-              Use Wallet
+              Update address
             </Button>
-            <p>{user?.addr}</p>
           </>
         ) : (
           <Button
@@ -124,7 +126,6 @@ const Portfolio: NextPage = () => {
             Connect Wallet
           </Button>
         )}
-
         {collectionIDs.data &&
           collectionIDs.data.map((id) => (
             <>
