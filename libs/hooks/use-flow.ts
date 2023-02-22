@@ -337,7 +337,7 @@ export function useFlow({
 
   pub fun main(): [Golazos.EditionData] {
       let editions: [Golazos.EditionData] = []
-      var id: UInt64 = Golazos.nextEditionID - 10
+      var id: UInt64 = 1
       // Note < , as nextEditionID has not yet been used
       while id < Golazos.nextEditionID {
           editions.append(Golazos.getEditionData(id: id)!)

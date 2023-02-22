@@ -19,7 +19,7 @@ export const useStore = create<State>((set) => ({
     set(() => ({ targetAddress: targetAddress })),
   momentNFT: '802448578',
   setMomentNFT: (momentNFT) => set(() => ({ momentNFT: momentNFT })),
-  playId: 372,
+  playId: 0, //372,
   setPlayId: (playId) => set(() => ({ playId: playId })),
   golazosSetName: 'Jugones',
   setGolazosSetName: (golazosSetName) =>
