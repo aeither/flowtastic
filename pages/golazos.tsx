@@ -27,6 +27,8 @@ export const CardRating: FC<{ playId: number }> = ({ playId }) => {
 
   return (
     <>
+      {(reviewAverage.data && reviewAverage.data._avg.rating) || 0} -{' '}
+      {reviewAverage.data && reviewAverage.data._count.rating} reviews
       <div>
         <Rating
           size={6}
@@ -39,8 +41,6 @@ export const CardRating: FC<{ playId: number }> = ({ playId }) => {
             (reviewAverage.data && reviewAverage.data._avg.rating) || 0
           }
         />
-        {(reviewAverage.data && reviewAverage.data._avg.rating) || 0} -{' '}
-        {reviewAverage.data && reviewAverage.data._count.rating} reviews
       </div>
     </>
   )
@@ -75,26 +75,24 @@ const Home: NextPage = () => {
                           play.metadata.MatchDate
                         ).getFullYear()}`}
                       </Text>
-                      <Text>
+                      <Text minH={12}>
                         {`${play.metadata.MatchHomeTeam} ${play.metadata.MatchHomeScore} - ${play.metadata.MatchAwayScore} ${play.metadata.MatchAwayTeam}`}
                       </Text>
                       <CardRating playId={Number(play.id)} />
                     </Stack>
                   </CardBody>
                   <Divider />
-                  <CardFooter>
-                    <ButtonGroup spacing="2">
-                      <NextLink href={`/play/${play.id}`}>
-                        <Button
-                          variant="solid"
-                          colorScheme="blue"
-                          onClick={() => {}}
-                        >
-                          View Moment Details
-                        </Button>
-                      </NextLink>
-                    </ButtonGroup>
-                  </CardFooter>
+                  <NextLink href={`/play/${play.id}`}>
+                    <Button
+                      w="full"
+                      variant="solid"
+                      borderTopRadius={0}
+                      colorScheme="blue"
+                      onClick={() => {}}
+                    >
+                      View Moment Details
+                    </Button>
+                  </NextLink>
                 </Card>
               </Center>
             </>
