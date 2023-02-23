@@ -26,6 +26,13 @@ export const UserDropdown: FC = () => {
           <Link
             _hover={{ textDecoration: 'none' }}
             as={NextLink}
+            href="/compare"
+          >
+            <MenuItem>Compare</MenuItem>
+          </Link>
+          <Link
+            _hover={{ textDecoration: 'none' }}
+            as={NextLink}
             href="/portfolio"
           >
             <MenuItem>Portfolio</MenuItem>

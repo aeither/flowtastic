@@ -1,5 +1,13 @@
 import React, { ForwardedRef, useEffect, useState } from 'react'
-import { Box, Button, HStack, Icon, IconButton, Stack, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  HStack,
+  Icon,
+  IconButton,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons'
 import { UseFormSetValue } from 'react-hook-form'
 import { ReviewFormInput } from '../home/review-form'
@@ -73,10 +81,11 @@ const Rating = React.forwardRef(
         <Button
           as="button"
           aria-label={`Rate ${idx}`}
-          height={`${size}px`}
-          width={`${size}px`}
+          // height={`${size}px`}
+          // width={`${size}px`}
           variant={'unstyled'}
-          mx={1}
+          size={{ sm: 'sm', md: 'md' }}
+          // mx={1}
           onClick={() => (viewOnly ? {} : onClick(idx))}
           _focus={{ outline: 0 }}
         >
@@ -90,7 +99,7 @@ const Rating = React.forwardRef(
     }
 
     return (
-      <HStack my={8} justify="center">
+      <HStack my={2} justify="center" spacing={0} gap={0}>
         <input name="rating" type="hidden" value={rating} ref={ref} />
         {buttons}
         {/* <Box width={`${size * 1.5}px`} textAlign="center">
