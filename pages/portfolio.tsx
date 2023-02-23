@@ -1,4 +1,5 @@
 import { ViewDetailsButton } from '@/components/shared/view-details-button'
+import { useCopyToClipboard } from '@/libs/hooks/use-copy-to-clipboard'
 import { useDB } from '@/libs/hooks/use-db'
 import {
   useCollectionIDs,
@@ -83,6 +84,7 @@ const Portfolio: NextPage = () => {
   const collectionIDs = useCollectionIDs({
     targetAddress: userAddress.data && userAddress.data.address,
   })
+  const { copyToClipboard, hasCopied } = useCopyToClipboard()
 
   return (
     <>
@@ -92,20 +94,25 @@ const Portfolio: NextPage = () => {
             <Heading as="h3" size="lg">
               Connect to add or update address
             </Heading>
-            <Text>
-              Current associated address:{' '}
-              {userAddress.data && userAddress.data.address?.substring(0, 6)}...
-            </Text>
+            <HStack>
+              <Text>
+                Current associated address:{' '}
+                {userAddress.data && userAddress.data.address?.substring(0, 6)}
+                ...
+              </Text>
+              <Button
+                onClick={() =>
+                  copyToClipboard(
+                    (userAddress.data && userAddress.data.address) || ''
+                  )
+                }
+              >
+                {hasCopied ? 'Copied' : 'Copy'}
+              </Button>
+            </HStack>
             {isLoggedIn ? (
               <>
-                <HStack>
-                  <Button
-                    onClick={async () => {
-                      await logout()
-                    }}
-                  >
-                    Logout
-                  </Button>
+                <HStack p={4}>
                   <Button
                     onClick={async () => {
                       const sigs = await (signUserMessage &&
@@ -122,6 +129,14 @@ const Portfolio: NextPage = () => {
                     }}
                   >
                     Update address
+                  </Button>
+                  <Button
+                    colorScheme={'red'}
+                    onClick={async () => {
+                      await logout()
+                    }}
+                  >
+                    Logout
                   </Button>
                 </HStack>
               </>

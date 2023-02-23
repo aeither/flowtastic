@@ -19,6 +19,7 @@ import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { Navigation, Pagination } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import { useCopyToClipboard } from '@/libs/hooks/use-copy-to-clipboard'
 
 const IMAGE_MEDIA_TYPES = [
   'capture_Hero_Black',
@@ -76,6 +77,7 @@ const MediaSlider: FC<{ play: PlayData }> = ({ play }) => {
 
 const Reviews: FC<{ playId: number | undefined }> = ({ playId }) => {
   const reviewsByPlayId = useReviewsByPlayId({ playId })
+
   return (
     <>
       {reviewsByPlayId.data &&
