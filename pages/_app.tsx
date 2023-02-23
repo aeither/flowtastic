@@ -22,7 +22,7 @@ if (typeof window !== 'undefined') {
   // For more info see https://nextjs.org/docs/basic-features/environment-variables#exposing-environment-variables-to-the-browser
 
   posthog.init('phc_sWDxbFNZZmk4B4LLFK27ZVkNsh06nUC36HrbaVQFKtC', {
-    api_host: 'https://app.posthog.com',
+    // api_host: 'https://app.posthog.com',
     // loaded: (posthog) => {
     //   if (process.env.NODE_ENV === 'development') posthog.opt_out_capturing()
     // },

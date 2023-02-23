@@ -16,6 +16,7 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { type NextPage } from 'next'
 import NextLink from 'next/link'
@@ -49,6 +50,7 @@ export const CardRating: FC<{ playId: number }> = ({ playId }) => {
 
 const Home: NextPage = () => {
   const { allPlays } = useFlow()
+  const cardBorderColor = useColorModeValue('white', 'gray.800')
 
   return (
     <>
@@ -57,7 +59,12 @@ const Home: NextPage = () => {
           allPlays.data.map((play) => (
             <>
               <Center>
-                <Card maxW="sm">
+                <Card
+                  maxW="sm"
+                  border={'2px'}
+                  borderColor={cardBorderColor}
+                  _hover={{ borderColor: 'teal.400' }}
+                >
                   <CardBody>
                     <Image
                       src={getPlayImage(
@@ -83,7 +90,7 @@ const Home: NextPage = () => {
                     </Stack>
                   </CardBody>
                   <Divider />
-                  <NextLink href={`/play/${play.id}`}>
+                  <NextLink href={`/play?playId=${play.id}`}>
                     <ViewDetailsButton playId={play.id} />
                   </NextLink>
                 </Card>

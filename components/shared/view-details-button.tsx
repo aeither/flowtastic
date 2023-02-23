@@ -8,7 +8,7 @@ export const ViewDetailsButton: FC<{ playId: string }> = ({ playId }) => {
     posthog.capture('view-details', { playId })
   }
   return (
-    <NextLink href={`/play/${playId}`}>
+    <NextLink href={`/play?playId=${playId}`}>
       <Button
         w="full"
         variant="solid"

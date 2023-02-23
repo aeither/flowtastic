@@ -10,7 +10,6 @@ import {
   CardBody,
   Center,
   Heading,
-  Image,
   Stack,
   Text,
   VStack,
@@ -111,7 +110,9 @@ const Reviews: FC<{ playId: number | undefined }> = ({ playId }) => {
 }
 
 const Play: NextPage = () => {
+  const router = useRouter()
   const { query } = useRouter()
+  console.log(router)
   const playId = Number(query.playId) as number | undefined
   const reviewAverage = useReviewAverage({
     playId,

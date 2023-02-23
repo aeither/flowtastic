@@ -64,7 +64,7 @@ export const Moment: FC<{ id: string }> = ({ id }) => {
               </Stack>
             </CardBody>
             <Divider />
-            <NextLink href={`/play/${momentProperties.data[1]}`}>
+            <NextLink href={`/play?playId=${momentProperties.data[1]}`}>
               <ViewDetailsButton playId={momentProperties.data[1] || '0'} />
             </NextLink>
           </Card>

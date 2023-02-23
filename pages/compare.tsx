@@ -87,7 +87,7 @@ export const MomentA: FC = () => {
             </Stack>
             <Divider />
             <ButtonGroup spacing="2">
-              <NextLink href={`/play/${playData.data.id}`}>
+              <NextLink href={`/play?playId=${playData.data.id}`}>
                 <Button variant="solid" colorScheme="teal" onClick={() => {}}>
                   View Moment
                 </Button>
