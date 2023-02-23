@@ -67,7 +67,7 @@ const Home: NextPage = () => {
                       borderRadius="lg"
                     />
                     <Stack mt="6" spacing="3">
-                      <Heading size="md">
+                      <Heading minH={'16'} size="md">
                         {`${play.metadata.PlayerFirstName} ${play.metadata.PlayerLastName}`}
                       </Heading>
                       <Text>

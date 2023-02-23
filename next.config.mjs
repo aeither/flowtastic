@@ -20,5 +20,14 @@ const config = {
     locales: ['en'],
     defaultLocale: 'en',
   },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/golazos',
+        permanent: false,
+      },
+    ]
+  },
 }
 export default config
