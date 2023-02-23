@@ -1,6 +1,7 @@
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import {
   Box,
+  Button,
   ButtonGroup,
   Flex,
   Heading,
@@ -31,12 +32,24 @@ export default function Layout({ children }: { children: ReactNode }) {
       </Head>
 
       {/* Navbar */}
-      <Flex w='full' p={4} minWidth="max-content" alignItems="center" gap="2">
-        <Link _hover={{ textDecoration: 'none' }} as={NextLink} href="/">
+      <Flex w="full" p={4} minWidth="max-content" alignItems="center" gap="2">
+        <Link _hover={{ textDecoration: 'none' }} as={NextLink} href="/golazos">
           <Box p="2">
             <Heading size="md">Flowtastic</Heading>
           </Box>
         </Link>
+        <Link _hover={{ textDecoration: 'none' }} as={NextLink} href="/golazos">
+          <Button variant={'ghost'}>Golazos</Button>
+        </Link>
+        <Button variant={'ghost'} color="gray.400" disabled>
+          Top Shot
+        </Button>
+        <Button variant={'ghost'} color="gray.400" disabled>
+          All Day
+        </Button>
+        <Button variant={'ghost'} color="gray.400" disabled>
+          Strike
+        </Button>
         <Spacer />
         <ButtonGroup gap="2">
           <IconButton
