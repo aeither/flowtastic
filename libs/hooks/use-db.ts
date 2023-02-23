@@ -48,27 +48,25 @@ export function useDB() {
   })
 
   const createReview = api.db.createReview.useMutation({
-    onMutate() {
-      toast.loading('Loading...')
-    },
-    onSuccess(data, variables, context) {
+    onMutate(variables) {
       const { playId: _playId } = variables
       setPlayId(_playId)
 
+      toast.loading('Loading...')
+    },
+    onSuccess(data, variables, context) {
       toast.remove()
       toast.success('Success')
 
-      if (playId) {
-        reviewAverage.refetch()
-        reviewsByPlayId.refetch()
-      }
+      reviewAverage.refetch()
+      reviewsByPlayId.refetch()
     },
     onError: ({ data }) => {
       toast.remove()
       if (data?.code === 'UNAUTHORIZED') {
         toast.error('Require sign in')
       } else {
-        toast.error('mutation error')
+        toast.error('Erorr. Make sure all fields are filled.')
       }
     },
   })

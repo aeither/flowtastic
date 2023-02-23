@@ -114,7 +114,6 @@ const Reviews: FC<{ playId: number | undefined }> = ({ playId }) => {
 const Play: NextPage = () => {
   const router = useRouter()
   const { query } = useRouter()
-  console.log(router)
   const playId = Number(query.playId) as number | undefined
   const reviewAverage = useReviewAverage({
     playId,
@@ -149,21 +148,21 @@ const Play: NextPage = () => {
               </Card>
             </Center>
 
-            <div>
-              <Rating
-                size={6}
-                icon="star"
-                scale={5}
-                fillColor="gold"
-                strokeColor="grey"
-                viewOnly
-                viewRating={
-                  (reviewAverage.data && reviewAverage.data._avg.rating) || 0
-                }
-              />
-              {reviewAverage.data && reviewAverage.data._avg.rating} -{' '}
+            <Rating
+              size={6}
+              icon="star"
+              scale={5}
+              fillColor="gold"
+              strokeColor="grey"
+              viewOnly
+              viewRating={
+                (reviewAverage.data && reviewAverage.data._avg.rating) || 0
+              }
+            />
+            <Center>
+              {(reviewAverage.data && reviewAverage.data._avg.rating) || 0} -{' '}
               {reviewAverage.data && reviewAverage.data._count.rating} reviews
-            </div>
+            </Center>
 
             <ReviewForm />
 

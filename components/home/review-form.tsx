@@ -6,10 +6,12 @@ import {
   FormControl,
   Input,
   Button,
+  Textarea,
 } from '@chakra-ui/react'
 import Rating from '../shared/rating'
 import { useDB } from '@/libs/hooks/use-db'
 import { useStore } from '@/libs/store'
+import { useRouter } from 'next/router'
 
 export interface ReviewFormInput {
   rating: number
@@ -19,7 +21,8 @@ export interface ReviewFormInput {
 
 export const ReviewForm: FC = () => {
   const { createReview } = useDB()
-  const playId = useStore((state) => state.playId)
+  const { query } = useRouter()
+  const playId = Number(query.playId) as number
 
   const {
     handleSubmit,
@@ -38,7 +41,10 @@ export const ReviewForm: FC = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      style={{ width: '100%', maxWidth: '390px', padding: '2px' }}
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <FormControl isInvalid={!!errors.title}>
         <FormLabel htmlFor="title">Title</FormLabel>
         <Input
@@ -55,7 +61,7 @@ export const ReviewForm: FC = () => {
       </FormControl>
       <FormControl isInvalid={!!errors.description}>
         <FormLabel htmlFor="description">Description</FormLabel>
-        <Input
+        <Textarea
           id="description"
           placeholder="description"
           {...register('description', {
@@ -77,7 +83,13 @@ export const ReviewForm: FC = () => {
           setValue={setValue}
         />
       </div>
-      <Button mt={4} colorScheme="teal" isLoading={isSubmitting} type="submit">
+      <Button
+        mt={4}
+        w="full"
+        colorScheme="teal"
+        isLoading={isSubmitting}
+        type="submit"
+      >
         Submit
       </Button>
     </form>

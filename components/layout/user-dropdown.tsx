@@ -22,7 +22,7 @@ export const UserDropdown: FC = () => {
         <MenuButton>
           <Avatar size={'sm'} name={name || 'acme'} src={image || ''} />
         </MenuButton>
-        <MenuList>
+        <MenuList zIndex={50}>
           <Link
             _hover={{ textDecoration: 'none' }}
             as={NextLink}
