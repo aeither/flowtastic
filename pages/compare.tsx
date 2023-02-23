@@ -5,6 +5,7 @@ import { getPlayImage } from '@/libs/utils/helpers'
 import {
   Button,
   ButtonGroup,
+  Center,
   Divider,
   Heading,
   HStack,
@@ -30,7 +31,7 @@ export const MomentA: FC = () => {
   // components to show details
   return (
     <>
-      <VStack>
+      <VStack p={4}>
         <Select
           placeholder="Select option"
           onChange={(e) => setPlayId(Number(e.target.value))}
@@ -57,34 +58,38 @@ export const MomentA: FC = () => {
               alt={playData.data.metadata.PlayDataID}
               borderRadius="lg"
             />
-            <Stack mt="6" spacing="3">
-              <Heading size="md" minH={'16'}>
-                {`${playData.data.metadata.PlayerFirstName} ${playData.data.metadata.PlayerLastName}`}
-              </Heading>
-              <Text>
-                {`${playData.data.metadata.PlayType} - ${new Date(
-                  playData.data.metadata.MatchDate
-                ).getFullYear()}`}
-              </Text>
-              <Text minH={'10'}>
-                {`${playData.data.metadata.MatchHomeTeam} ${playData.data.metadata.MatchHomeScore} - ${playData.data.metadata.MatchAwayScore} ${playData.data.metadata.MatchAwayTeam}`}
-              </Text>
-              <div>
-                <Rating
-                  size={6}
-                  icon="star"
-                  scale={5}
-                  fillColor="gold"
-                  strokeColor="grey"
-                  viewOnly
-                  viewRating={
-                    (reviewAverage.data && reviewAverage.data._avg.rating) || 0
-                  }
-                />
-                {(reviewAverage.data && reviewAverage.data._avg.rating) || 0} -{' '}
-                {reviewAverage.data && reviewAverage.data._count.rating} reviews
-              </div>
-            </Stack>
+            <Center>
+              <Stack mt="6" spacing="3">
+                <Heading size={{ sm: 'sm', md: 'md' }} minH={'16'}>
+                  {`${playData.data.metadata.PlayerFirstName} ${playData.data.metadata.PlayerLastName}`}
+                </Heading>
+                <Text>
+                  {`${playData.data.metadata.PlayType} - ${new Date(
+                    playData.data.metadata.MatchDate
+                  ).getFullYear()}`}
+                </Text>
+                <Text minH={'10'}>
+                  {`${playData.data.metadata.MatchHomeTeam} ${playData.data.metadata.MatchHomeScore} - ${playData.data.metadata.MatchAwayScore} ${playData.data.metadata.MatchAwayTeam}`}
+                </Text>
+                <div>
+                  {(reviewAverage.data && reviewAverage.data._avg.rating) || 0}{' '}
+                  - {reviewAverage.data && reviewAverage.data._count.rating}{' '}
+                  reviews
+                  <Rating
+                    size={6}
+                    icon="star"
+                    scale={5}
+                    fillColor="gold"
+                    strokeColor="grey"
+                    viewOnly
+                    viewRating={
+                      (reviewAverage.data && reviewAverage.data._avg.rating) ||
+                      0
+                    }
+                  />
+                </div>
+              </Stack>
+            </Center>
             <Divider />
             <ButtonGroup spacing="2">
               <NextLink href={`/play?playId=${playData.data.id}`}>
