@@ -8,19 +8,21 @@ import {
   IconButton,
   Link,
   Spacer,
+  useBreakpointValue,
   useColorMode,
 } from '@chakra-ui/react'
 import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import NextLink from 'next/link'
 import { type ReactNode } from 'react'
+import MobileDrawer from './mobile-drawer'
 import { SignInModal } from './sign-in-modal'
 import { UserDropdown } from './user-dropdown'
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession()
   const { colorMode, toggleColorMode } = useColorMode()
-
+  const isMobile = useBreakpointValue({ base: true, md: false }, { ssr: false })
   // sign in modal with signIn("google");
 
   return (
@@ -33,23 +35,49 @@ export default function Layout({ children }: { children: ReactNode }) {
 
       {/* Navbar */}
       <Flex w="full" p={4} minWidth="max-content" alignItems="center" gap="2">
-        <Link _hover={{ textDecoration: 'none' }} as={NextLink} href="/golazos">
-          <Box p="2">
-            <Heading size="md">Flowtastic</Heading>
-          </Box>
-        </Link>
-        <Link _hover={{ textDecoration: 'none' }} as={NextLink} href="/golazos">
-          <Button variant={'ghost'}>Golazos</Button>
-        </Link>
-        <Button variant={'ghost'} color="gray.400" disabled>
-          Top Shot
-        </Button>
-        <Button variant={'ghost'} color="gray.400" disabled>
-          All Day
-        </Button>
-        <Button variant={'ghost'} color="gray.400" disabled>
-          Strike
-        </Button>
+        {isMobile ? (
+          <>
+            <MobileDrawer />
+            <Link
+              _hover={{ textDecoration: 'none' }}
+              as={NextLink}
+              href="/golazos"
+            >
+              <Box p="2">
+                <Heading size="md">Flowtastic</Heading>
+              </Box>
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link
+              _hover={{ textDecoration: 'none' }}
+              as={NextLink}
+              href="/golazos"
+            >
+              <Box p="2">
+                <Heading size="md">Flowtastic</Heading>
+              </Box>
+            </Link>
+            <Link
+              _hover={{ textDecoration: 'none' }}
+              as={NextLink}
+              href="/golazos"
+            >
+              <Button variant={'ghost'}>Golazos</Button>
+            </Link>
+            <Button variant={'ghost'} color="gray.400" disabled>
+              Top Shot
+            </Button>
+            <Button variant={'ghost'} color="gray.400" disabled>
+              All Day
+            </Button>
+            <Button variant={'ghost'} color="gray.400" disabled>
+              Strike
+            </Button>
+          </>
+        )}
+
         <Spacer />
         <ButtonGroup gap="2">
           <IconButton
