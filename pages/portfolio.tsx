@@ -1,21 +1,23 @@
+import { ViewDetailsButton } from '@/components/shared/view-details-button'
 import { useDB } from '@/libs/hooks/use-db'
 import {
-  useCollectionIDs, useMomentProperties,
-  useNftMetadata
+  useCollectionIDs,
+  useMomentProperties,
+  useNftMetadata,
 } from '@/libs/hooks/use-flow'
 import { useStore } from '@/libs/store'
 import {
   Button,
-  ButtonGroup,
   Card,
   CardBody,
-  CardFooter,
   Divider,
   Heading,
   Image,
+  SimpleGrid,
   Stack,
   Text,
-  VStack
+  useColorModeValue,
+  VStack,
 } from '@chakra-ui/react'
 import { useAuthentication, verifyUserSignatures } from '@flowity/react'
 import { type NextPage } from 'next'
@@ -34,14 +36,19 @@ export const Moment: FC<{ id: string }> = ({ id }) => {
     momentNFT: id,
     targetAddress: userAddress.data && userAddress.data.address,
   })
-  const setPlayId = useStore((state) => state.setPlayId)
+
+  const cardBorderColor = useColorModeValue('white', 'gray.800')
 
   return (
     <>
       {nftMetadata.data && momentProperties.data && (
         <VStack>
-          <Text>{id}</Text>
-          <Card maxW="sm">
+          <Card
+            maxW="sm"
+            border={'2px'}
+            borderColor={cardBorderColor}
+            _hover={{ borderColor: 'teal.400' }}
+          >
             <CardBody>
               <Image
                 src={nftMetadata.data.thumbnail.url}
@@ -57,22 +64,9 @@ export const Moment: FC<{ id: string }> = ({ id }) => {
               </Stack>
             </CardBody>
             <Divider />
-            <CardFooter>
-              <ButtonGroup spacing="2">
-                <NextLink href={`/play/${momentProperties.data[1]}`}>
-                  <Button
-                    variant="solid"
-                    colorScheme="blue"
-                    onClick={() => {
-                      if (!momentProperties.data) return
-                      setPlayId(Number(momentProperties.data[1]))
-                    }}
-                  >
-                    View Moment Details
-                  </Button>
-                </NextLink>
-              </ButtonGroup>
-            </CardFooter>
+            <NextLink href={`/play/${momentProperties.data[1]}`}>
+              <ViewDetailsButton playId={momentProperties.data[1] || '0'} />
+            </NextLink>
           </Card>
         </VStack>
       )}
@@ -87,11 +81,6 @@ const Portfolio: NextPage = () => {
   const collectionIDs = useCollectionIDs({
     targetAddress: userAddress.data && userAddress.data.address,
   })
-  console.log('🚀 ~ file: portfolio.tsx:17 ~ collectionIDs:', collectionIDs)
-
-  // search another wallet
-  //   const address = (user?.addr as `0x${string}`) || '0x123'
-  //   const { data } = useAccount({ address: address })
 
   return (
     <>
@@ -133,12 +122,14 @@ const Portfolio: NextPage = () => {
             Connect Wallet
           </Button>
         )}
-        {collectionIDs.data &&
-          collectionIDs.data.map((id) => (
-            <>
-              <Moment key={id} id={id} />
-            </>
-          ))}
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} px={4}>
+          {collectionIDs.data &&
+            collectionIDs.data.map((id) => (
+              <>
+                <Moment key={id} id={id} />
+              </>
+            ))}
+        </SimpleGrid>
       </main>
     </>
   )

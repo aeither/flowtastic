@@ -1,15 +1,10 @@
 import Rating from '@/components/shared/rating'
 import { useDB, useReviewAverage } from '@/libs/hooks/use-db'
 import { useFlow, usePlayData } from '@/libs/hooks/use-flow'
-import { useStore } from '@/libs/store'
 import { getPlayImage } from '@/libs/utils/helpers'
 import {
   Button,
   ButtonGroup,
-  Card,
-  CardBody,
-  CardFooter,
-  Center,
   Divider,
   Heading,
   HStack,
@@ -93,12 +88,7 @@ export const MomentA: FC = () => {
             <Divider />
             <ButtonGroup spacing="2">
               <NextLink href={`/play/${playData.data.id}`}>
-                <Button
-                  // size={{ sm: 'sm', md: 'md' }}
-                  variant="solid"
-                  colorScheme="blue"
-                  onClick={() => {}}
-                >
+                <Button variant="solid" colorScheme="teal" onClick={() => {}}>
                   View Moment
                 </Button>
               </NextLink>

@@ -13,8 +13,12 @@ import {
   RadioGroup,
   Stack,
   IconButton,
+  Text,
+  Link,
+  VStack,
 } from '@chakra-ui/react'
 import React from 'react'
+import NextLink from 'next/link'
 
 export default function MobileDrawer() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -26,11 +30,26 @@ export default function MobileDrawer() {
       <Drawer placement={'right' as any} onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader borderBottomWidth="1px">Basic Drawer</DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px">Menu</DrawerHeader>
           <DrawerBody>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
+            <VStack>
+              <Link
+                _hover={{ textDecoration: 'none' }}
+                as={NextLink}
+                href="/golazos"
+              >
+                <Button variant={'ghost'}>Golazos</Button>
+              </Link>
+              <Button variant={'ghost'} color="gray.400" disabled>
+                Top Shot
+              </Button>
+              <Button variant={'ghost'} color="gray.400" disabled>
+                All Day
+              </Button>
+              <Button variant={'ghost'} color="gray.400" disabled>
+                Strike
+              </Button>
+            </VStack>
           </DrawerBody>
         </DrawerContent>
       </Drawer>

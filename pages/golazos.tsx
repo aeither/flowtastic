@@ -1,4 +1,5 @@
 import Rating from '@/components/shared/rating'
+import { ViewDetailsButton } from '@/components/shared/view-details-button'
 import { useReviewAverage } from '@/libs/hooks/use-db'
 import { useFlow } from '@/libs/hooks/use-flow'
 import { getPlayImage } from '@/libs/utils/helpers'
@@ -83,15 +84,7 @@ const Home: NextPage = () => {
                   </CardBody>
                   <Divider />
                   <NextLink href={`/play/${play.id}`}>
-                    <Button
-                      w="full"
-                      variant="solid"
-                      borderTopRadius={0}
-                      colorScheme="blue"
-                      onClick={() => {}}
-                    >
-                      View Moment Details
-                    </Button>
+                    <ViewDetailsButton playId={play.id} />
                   </NextLink>
                 </Card>
               </Center>
