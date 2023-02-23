@@ -10,8 +10,10 @@ import {
   Button,
   Card,
   CardBody,
+  Center,
   Divider,
   Heading,
+  HStack,
   Image,
   SimpleGrid,
   Stack,
@@ -85,43 +87,56 @@ const Portfolio: NextPage = () => {
   return (
     <>
       <main>
-        <Text>
-          Current associated address:{' '}
-          {userAddress.data && userAddress.data.address}
-        </Text>
-        <Text>Connect to add or update address</Text>
-        {isLoggedIn ? (
-          <>
-            <Button
-              onClick={async () => {
-                await logout()
-              }}
-            >
-              Logout
-            </Button>
-            <Button
-              onClick={async () => {
-                const sigs = await (signUserMessage && signUserMessage(MESSAGE))
-                if (!sigs) return
-                const sigVerified = await verifyUserSignatures(MESSAGE, sigs)
-                if (!sigVerified) return
-                if (user) {
-                  addAddress.mutate({ address: user.addr })
-                }
-              }}
-            >
-              Update address
-            </Button>
-          </>
-        ) : (
-          <Button
-            onClick={async () => {
-              await login()
-            }}
-          >
-            Connect Wallet
-          </Button>
-        )}
+        <Center>
+          <VStack>
+            <Heading as="h3" size="lg">
+              Connect to add or update address
+            </Heading>
+            <Text>
+              Current associated address:{' '}
+              {userAddress.data && userAddress.data.address?.substring(0, 6)}...
+            </Text>
+            {isLoggedIn ? (
+              <>
+                <HStack>
+                  <Button
+                    onClick={async () => {
+                      await logout()
+                    }}
+                  >
+                    Logout
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      const sigs = await (signUserMessage &&
+                        signUserMessage(MESSAGE))
+                      if (!sigs) return
+                      const sigVerified = await verifyUserSignatures(
+                        MESSAGE,
+                        sigs
+                      )
+                      if (!sigVerified) return
+                      if (user) {
+                        addAddress.mutate({ address: user.addr })
+                      }
+                    }}
+                  >
+                    Update address
+                  </Button>
+                </HStack>
+              </>
+            ) : (
+              <Button
+                onClick={async () => {
+                  await login()
+                }}
+              >
+                Connect Wallet
+              </Button>
+            )}
+          </VStack>
+        </Center>
+
         <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} px={4}>
           {collectionIDs.data &&
             collectionIDs.data.map((id) => (
