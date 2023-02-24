@@ -64,6 +64,16 @@ export const Moment: FC<{ id: string }> = ({ id }) => {
                 <Text>
                   Serial number: {Number(momentProperties.data[2]).toFixed(0)}
                 </Text>
+                <Text>
+                  Minted:{' '}
+                  {`${new Date(
+                    Number(momentProperties.data[3]) * 1000 || 0
+                  ).getMonth()} ${new Date(
+                    Number(momentProperties.data[3]) * 1000 || 0
+                  ).getDate()} ${new Date(
+                    Number(momentProperties.data[3]) * 1000 || 0
+                  ).getFullYear()} `}
+                </Text>
               </Stack>
             </CardBody>
             <Divider />
