@@ -54,6 +54,12 @@ const Home: NextPage = () => {
 
   return (
     <>
+      <Heading as="h2" size="xl" p={4}>
+        Traits
+      </Heading>
+      <Heading as="h2" size="xl" p={4}>
+        View All
+      </Heading>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} px={4}>
         {allPlays.data &&
           allPlays.data.map((play) => (

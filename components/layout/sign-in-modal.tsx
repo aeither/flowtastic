@@ -1,5 +1,6 @@
 import {
   Button,
+  Heading,
   Image,
   Modal,
   ModalBody,
@@ -31,8 +32,8 @@ export const SignInModal: FC = () => {
           <ModalCloseButton />
           <ModalBody>
             <VStack gap={4}>
-              <Image alt="logo" src="https://via.placeholder.com/150x150" />
-              <Text>Welcome to Flowtastic!</Text>
+              <Image alt="logo" src="/dark_logo.png" boxSize={'16'} />
+              <Heading fontSize={'xl'}>Welcome to Flowtastic!</Heading>
               <Button
                 isLoading={signInClicked}
                 onClick={() => {
