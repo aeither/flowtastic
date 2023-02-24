@@ -93,7 +93,11 @@ export default function Layout({ children }: { children: ReactNode }) {
         </ButtonGroup>
       </Flex>
       <main>{children}</main>
+
       {/* Footer */}
+      <Flex justify={'center'} p={4}>
+        Flowtastic © 2023
+      </Flex>
     </div>
   )
 }

@@ -17,7 +17,7 @@ export const ViewDetailsButton: FC<{ playId: string }> = ({ playId }) => {
         colorScheme="teal"
         onClick={viewDetails}
       >
-        View Details
+        Reviews
       </Button>
     </NextLink>
   )

@@ -59,7 +59,7 @@ export const MomentA: FC = () => {
             <ButtonGroup spacing="2">
               <NextLink href={`/play?playId=${playData.data.id}`}>
                 <Button variant="solid" colorScheme="teal" onClick={() => {}}>
-                  View Moment
+                  Reviews
                 </Button>
               </NextLink>
             </ButtonGroup>
@@ -132,12 +132,10 @@ const Portfolio: NextPage = () => {
 
   return (
     <>
-      <main>
-        <HStack w="full" align={'start'} justify="center">
-          <MomentA />
-          <MomentA />
-        </HStack>
-      </main>
+      <HStack w="full" align={'start'} justify="center" minH={'calc(100vh - 104px - 32px)'}>
+        <MomentA />
+        <MomentA />
+      </HStack>
     </>
   )
 }
