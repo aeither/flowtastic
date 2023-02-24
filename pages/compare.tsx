@@ -49,10 +49,7 @@ export const MomentA: FC = () => {
             <Image
               // boxSize="100px"
               maxBlockSize={'350px'}
-              src={getPlayImage(
-                playData.data.metadata.PlayDataID,
-                'capture_Hero_Black'
-              )}
+              src={getPlayImage(playData.data.metadata.PlayDataID, 'capture_Hero_Black')}
               alt={playData.data.metadata.PlayDataID}
               borderRadius="lg"
             />
@@ -67,9 +64,8 @@ export const MomentA: FC = () => {
             <Stack mt="6" spacing="3">
               <div>
                 <Center>
-                  {(reviewAverage.data && reviewAverage.data._avg.rating) || 0}{' '}
-                  - {reviewAverage.data && reviewAverage.data._count.rating}{' '}
-                  reviews
+                  {(reviewAverage.data && reviewAverage.data._avg.rating) || 0} -{' '}
+                  {reviewAverage.data && reviewAverage.data._count.rating} reviews
                 </Center>
 
                 <Rating
@@ -79,9 +75,7 @@ export const MomentA: FC = () => {
                   fillColor="gold"
                   strokeColor="grey"
                   viewOnly
-                  viewRating={
-                    (reviewAverage.data && reviewAverage.data._avg.rating) || 0
-                  }
+                  viewRating={(reviewAverage.data && reviewAverage.data._avg.rating) || 0}
                 />
               </div>
 
@@ -106,13 +100,9 @@ export const MomentA: FC = () => {
 
               <Heading size={{ sm: 'sm', md: 'md' }}>Match</Heading>
               <Text>
-                {`${new Date(
-                  playData.data.metadata.MatchDate
-                ).getMonth()} ${new Date(
-                  playData.data.metadata.MatchDate
-                ).getDate()} ${new Date(
-                  playData.data.metadata.MatchDate
-                ).getFullYear()}`}
+                {`${new Date(playData.data.metadata.MatchDate).getMonth()} ${new Date(
+                  playData.data.metadata.MatchDate,
+                ).getDate()} ${new Date(playData.data.metadata.MatchDate).getFullYear()}`}
               </Text>
               <Text>Season {playData.data.metadata.MatchSeason}</Text>
               <Text>Match day {playData.data.metadata.MatchDay}</Text>
@@ -132,7 +122,12 @@ const Portfolio: NextPage = () => {
 
   return (
     <>
-      <HStack w="full" align={'start'} justify="center" minH={'calc(100vh - 104px - 32px)'}>
+      <HStack
+        w="full"
+        align={'start'}
+        justify="center"
+        minH={'calc(100vh - 104px - 32px)'}
+      >
         <MomentA />
         <MomentA />
       </HStack>

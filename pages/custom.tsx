@@ -30,14 +30,10 @@ const NFTMetadataMediasComponent: FC = () => {
   }
   `
 
-  const { data, isLoading, isFetching, isError, error } =
-    useScript<NFTMetadataMedias>({
-      cadence: CADENCE_SCRIPT,
-      args: (arg, t) => [
-        arg('0xcd2983e6eac4b9b9', t.Address),
-        arg('802448578', t.UInt64),
-      ],
-    })
+  const { data, isLoading, isFetching, isError, error } = useScript<NFTMetadataMedias>({
+    cadence: CADENCE_SCRIPT,
+    args: (arg, t) => [arg('0xcd2983e6eac4b9b9', t.Address), arg('802448578', t.UInt64)],
+  })
   console.log('🚀 ~ file: custom.tsx:39 ~ Custom ~ data', data)
   // need index 8 for video and index 10 for idle video
   return <></>
@@ -62,14 +58,10 @@ const NFTMetadataDisplayComponent: FC = () => {
   }
   `
 
-  const { data, isLoading, isFetching, isError, error } =
-    useScript<NFTMetadataDisplay>({
-      cadence: CADENCE_SCRIPT,
-      args: (arg, t) => [
-        arg('0xcd2983e6eac4b9b9', t.Address),
-        arg('802448578', t.UInt64),
-      ],
-    })
+  const { data, isLoading, isFetching, isError, error } = useScript<NFTMetadataDisplay>({
+    cadence: CADENCE_SCRIPT,
+    args: (arg, t) => [arg('0xcd2983e6eac4b9b9', t.Address), arg('802448578', t.UInt64)],
+  })
   console.log('🚀 ~ file: custom.tsx:39 ~ Custom ~ data', data)
   return <></>
 }
@@ -95,10 +87,7 @@ const NFTPropertiesComponent: FC = () => {
 
   const { data, isLoading, isFetching, isError, error } = useScript<string[]>({
     cadence: CADENCE_SCRIPT,
-    args: (arg, t) => [
-      arg('0xcd2983e6eac4b9b9', t.Address),
-      arg('802448578', t.UInt64),
-    ],
+    args: (arg, t) => [arg('0xcd2983e6eac4b9b9', t.Address), arg('802448578', t.UInt64)],
   })
   console.log('🚀 ~ file: custom.tsx:39 ~ Custom ~ data', data)
   return <></>

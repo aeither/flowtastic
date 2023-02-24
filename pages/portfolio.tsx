@@ -70,16 +70,16 @@ export const Moment: FC<{ id: string }> = ({ id }) => {
                 <Text>{nftMetadata.data.description}</Text>
                 <Tag w={'fit-content'} borderRadius="full" colorScheme="teal">
                   {`${Number(momentProperties.data[2]).toFixed(0)}/${Number(
-                    nftEditions.data.infoList[0]?.max
+                    nftEditions.data.infoList[0]?.max,
                   )}`}
                 </Tag>
                 <Text>
                   {`${new Date(
-                    Number(momentProperties.data[3]) * 1000 || 0
+                    Number(momentProperties.data[3]) * 1000 || 0,
                   ).getMonth()} ${new Date(
-                    Number(momentProperties.data[3]) * 1000 || 0
+                    Number(momentProperties.data[3]) * 1000 || 0,
                   ).getDate()} ${new Date(
-                    Number(momentProperties.data[3]) * 1000 || 0
+                    Number(momentProperties.data[3]) * 1000 || 0,
                   ).getFullYear()} `}
                 </Text>
               </Stack>
@@ -120,9 +120,7 @@ const Portfolio: NextPage = () => {
               </Text>
               <Button
                 onClick={() =>
-                  copyToClipboard(
-                    (userAddress.data && userAddress.data.address) || ''
-                  )
+                  copyToClipboard((userAddress.data && userAddress.data.address) || '')
                 }
               >
                 {hasCopied ? 'Copied' : 'Copy'}
@@ -133,13 +131,9 @@ const Portfolio: NextPage = () => {
                 <>
                   <Button
                     onClick={async () => {
-                      const sigs = await (signUserMessage &&
-                        signUserMessage(MESSAGE))
+                      const sigs = await (signUserMessage && signUserMessage(MESSAGE))
                       if (!sigs) return
-                      const sigVerified = await verifyUserSignatures(
-                        MESSAGE,
-                        sigs
-                      )
+                      const sigVerified = await verifyUserSignatures(MESSAGE, sigs)
                       if (!sigVerified) return
                       if (user) {
                         addAddress.mutate({ address: user.addr })

@@ -39,9 +39,7 @@ export const CardRating: FC<{ playId: number }> = ({ playId }) => {
           fillColor="gold"
           strokeColor="grey"
           viewOnly
-          viewRating={
-            (reviewAverage.data && reviewAverage.data._avg.rating) || 0
-          }
+          viewRating={(reviewAverage.data && reviewAverage.data._avg.rating) || 0}
         />
       </div>
     </>
@@ -73,10 +71,7 @@ const Home: NextPage = () => {
                 >
                   <CardBody>
                     <Image
-                      src={getPlayImage(
-                        play.metadata.PlayDataID,
-                        'capture_Hero_Black'
-                      )}
+                      src={getPlayImage(play.metadata.PlayDataID, 'capture_Hero_Black')}
                       alt={play.metadata.PlayDataID}
                       borderRadius="lg"
                     />
@@ -86,7 +81,7 @@ const Home: NextPage = () => {
                       </Heading>
                       <Text>
                         {`${play.metadata.PlayType} - ${new Date(
-                          play.metadata.MatchDate
+                          play.metadata.MatchDate,
                         ).getFullYear()}`}
                       </Text>
                       <Text minH={12}>

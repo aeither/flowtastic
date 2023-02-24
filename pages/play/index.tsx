@@ -56,7 +56,7 @@ const MediaSlider: FC<{ play: PlayData }> = ({ play }) => {
               playId={play.metadata.PlayDataID}
               srcUrl={getPlayImage(
                 play.metadata.PlayDataID,
-                IMAGE_MEDIA_TYPES[id]! as ImageType
+                IMAGE_MEDIA_TYPES[id]! as ImageType,
               )}
             />
           </SwiperSlide>
@@ -68,7 +68,7 @@ const MediaSlider: FC<{ play: PlayData }> = ({ play }) => {
               srcUrl={'https://cdn-icons-png.flaticon.com/512/1110/1110736.png'}
               videolUrl={getPlayVideo(
                 play.metadata.PlayDataID,
-                VIDEO_MEDIA_TYPES[id]! as VideoType
+                VIDEO_MEDIA_TYPES[id]! as VideoType,
               )}
             />
           </SwiperSlide>
@@ -142,7 +142,7 @@ const Play: NextPage = () => {
                     </Heading>
                     <Text>
                       {`${play.metadata.PlayType} - ${new Date(
-                        play.metadata.MatchDate
+                        play.metadata.MatchDate,
                       ).getFullYear()}`}
                     </Text>
                     <Text>
@@ -158,15 +158,12 @@ const Play: NextPage = () => {
                     strokeColor="grey"
                     viewOnly
                     viewRating={
-                      (reviewAverage.data && reviewAverage.data._avg.rating) ||
-                      0
+                      (reviewAverage.data && reviewAverage.data._avg.rating) || 0
                     }
                   />
                   <Center>
-                    {(reviewAverage.data && reviewAverage.data._avg.rating) ||
-                      0}{' '}
-                    - {reviewAverage.data && reviewAverage.data._count.rating}{' '}
-                    reviews
+                    {(reviewAverage.data && reviewAverage.data._avg.rating) || 0} -{' '}
+                    {reviewAverage.data && reviewAverage.data._count.rating} reviews
                   </Center>
                 </CardBody>
               </Card>
