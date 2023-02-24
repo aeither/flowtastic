@@ -27,8 +27,6 @@ export const MomentA: FC = () => {
   const reviewAverage = useReviewAverage({
     playId,
   })
-  // components to show media
-  // components to show details
   return (
     <>
       <VStack p={4}>
@@ -58,39 +56,6 @@ export const MomentA: FC = () => {
               alt={playData.data.metadata.PlayDataID}
               borderRadius="lg"
             />
-            <Center>
-              <Stack mt="6" spacing="3">
-                <Heading size={{ sm: 'sm', md: 'md' }} minH={'16'}>
-                  {`${playData.data.metadata.PlayerFirstName} ${playData.data.metadata.PlayerLastName}`}
-                </Heading>
-                <Text>
-                  {`${playData.data.metadata.PlayType} - ${new Date(
-                    playData.data.metadata.MatchDate
-                  ).getFullYear()}`}
-                </Text>
-                <Text minH={'10'}>
-                  {`${playData.data.metadata.MatchHomeTeam} ${playData.data.metadata.MatchHomeScore} - ${playData.data.metadata.MatchAwayScore} ${playData.data.metadata.MatchAwayTeam}`}
-                </Text>
-                <div>
-                  {(reviewAverage.data && reviewAverage.data._avg.rating) || 0}{' '}
-                  - {reviewAverage.data && reviewAverage.data._count.rating}{' '}
-                  reviews
-                  <Rating
-                    size={6}
-                    icon="star"
-                    scale={5}
-                    fillColor="gold"
-                    strokeColor="grey"
-                    viewOnly
-                    viewRating={
-                      (reviewAverage.data && reviewAverage.data._avg.rating) ||
-                      0
-                    }
-                  />
-                </div>
-              </Stack>
-            </Center>
-            <Divider />
             <ButtonGroup spacing="2">
               <NextLink href={`/play?playId=${playData.data.id}`}>
                 <Button variant="solid" colorScheme="teal" onClick={() => {}}>
@@ -98,6 +63,63 @@ export const MomentA: FC = () => {
                 </Button>
               </NextLink>
             </ButtonGroup>
+            <Divider />
+            <Stack mt="6" spacing="3">
+              <div>
+                <Center>
+                  {(reviewAverage.data && reviewAverage.data._avg.rating) || 0}{' '}
+                  - {reviewAverage.data && reviewAverage.data._count.rating}{' '}
+                  reviews
+                </Center>
+
+                <Rating
+                  size={6}
+                  icon="star"
+                  scale={5}
+                  fillColor="gold"
+                  strokeColor="grey"
+                  viewOnly
+                  viewRating={
+                    (reviewAverage.data && reviewAverage.data._avg.rating) || 0
+                  }
+                />
+              </div>
+
+              <Divider />
+
+              <Heading size={{ sm: 'sm', md: 'md' }}>Player</Heading>
+              <Heading size={{ sm: 'xs', md: 'sm' }} minH={'16'}>
+                {`${playData.data.metadata.PlayerFirstName} ${playData.data.metadata.PlayerLastName}`}
+              </Heading>
+              <Text>{playData.data.metadata.PlayerCountry}</Text>
+              <Text>Number {playData.data.metadata.PlayerNumber}</Text>
+              <Text>{playData.data.metadata.PlayerPosition}</Text>
+
+              <Divider />
+
+              <Heading size={{ sm: 'sm', md: 'md' }}>Play</Heading>
+              <Text>{playData.data.metadata.PlayType}</Text>
+              <Text>{playData.data.metadata.PlayHalf} Half</Text>
+              <Text>Minute {playData.data.metadata.PlayTime} </Text>
+
+              <Divider />
+
+              <Heading size={{ sm: 'sm', md: 'md' }}>Match</Heading>
+              <Text>
+                {`${new Date(
+                  playData.data.metadata.MatchDate
+                ).getMonth()} ${new Date(
+                  playData.data.metadata.MatchDate
+                ).getDate()} ${new Date(
+                  playData.data.metadata.MatchDate
+                ).getFullYear()}`}
+              </Text>
+              <Text>Season {playData.data.metadata.MatchSeason}</Text>
+              <Text>Match day {playData.data.metadata.MatchDay}</Text>
+              <Text minH={'10'}>
+                {`${playData.data.metadata.MatchHomeTeam} ${playData.data.metadata.MatchHomeScore} - ${playData.data.metadata.MatchAwayScore} ${playData.data.metadata.MatchAwayTeam}`}
+              </Text>
+            </Stack>
           </VStack>
         )}
       </VStack>
@@ -111,7 +133,7 @@ const Portfolio: NextPage = () => {
   return (
     <>
       <main>
-        <HStack w="full" align={'center'} justify="center">
+        <HStack w="full" align={'start'} justify="center">
           <MomentA />
           <MomentA />
         </HStack>
