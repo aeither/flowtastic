@@ -1,17 +1,16 @@
-import { FC } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { useDB } from '@/libs/hooks/use-db'
 import {
+  Button,
+  FormControl,
   FormErrorMessage,
   FormLabel,
-  FormControl,
   Input,
-  Button,
   Textarea,
 } from '@chakra-ui/react'
-import Rating from '../shared/rating'
-import { useDB } from '@/libs/hooks/use-db'
-import { useStore } from '@/libs/store'
 import { useRouter } from 'next/router'
+import { FC } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import Rating from '../shared/rating'
 
 export interface ReviewFormInput {
   rating: number
@@ -19,7 +18,7 @@ export interface ReviewFormInput {
   description: string
 }
 
-export const ReviewForm: FC = () => {
+export const ReviewForm: FC<{ onClose: () => void }> = ({ onClose }) => {
   const { createReview } = useDB()
   const { query } = useRouter()
   const playId = Number(query.playId) as number
@@ -38,6 +37,8 @@ export const ReviewForm: FC = () => {
     e?.preventDefault()
 
     createReview.mutate({ description, playId, rating, title })
+
+    onClose()
   }
 
   return (
@@ -46,6 +47,16 @@ export const ReviewForm: FC = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <FormControl isInvalid={!!errors.title}>
+        <div>
+          <Rating
+            size={8}
+            icon="star"
+            scale={5}
+            fillColor="gold"
+            strokeColor="grey"
+            setValue={setValue}
+          />
+        </div>
         <FormLabel htmlFor="title">Title</FormLabel>
         <Input
           id="title"
@@ -60,7 +71,7 @@ export const ReviewForm: FC = () => {
         </FormErrorMessage>
       </FormControl>
       <FormControl isInvalid={!!errors.description}>
-        <FormLabel htmlFor="description">Description</FormLabel>
+        <FormLabel htmlFor="description">Review</FormLabel>
         <Textarea
           id="description"
           placeholder="description"
@@ -73,16 +84,6 @@ export const ReviewForm: FC = () => {
           {errors.description && errors.description.message}
         </FormErrorMessage>
       </FormControl>
-      <div>
-        <Rating
-          size={8}
-          icon="star"
-          scale={5}
-          fillColor="gold"
-          strokeColor="grey"
-          setValue={setValue}
-        />
-      </div>
       <Button
         mt={4}
         w="full"

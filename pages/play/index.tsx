@@ -4,7 +4,7 @@ import Rating from '@/components/shared/rating'
 import { useReviewAverage, useReviewsByPlayId } from '@/libs/hooks/use-db'
 import { usePlayData } from '@/libs/hooks/use-flow'
 import { ImageType, PlayData, VideoType } from '@/libs/types'
-import { getPlayImage, getPlayVideo } from '@/libs/utils/helpers'
+import { getPlayImage, getPlayVideo, timeAgo } from '@/libs/utils/helpers'
 import {
   Card,
   CardBody,
@@ -12,6 +12,8 @@ import {
   Heading,
   Stack,
   Text,
+  useColorMode,
+  useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
 import { type NextPage } from 'next'
@@ -20,6 +22,7 @@ import { FC } from 'react'
 import { Navigation, Pagination } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { useCopyToClipboard } from '@/libs/hooks/use-copy-to-clipboard'
+import { ReviewFormModal } from '@/components/home/review-form-modal'
 
 const IMAGE_MEDIA_TYPES = [
   'capture_Hero_Black',
@@ -77,6 +80,7 @@ const MediaSlider: FC<{ play: PlayData }> = ({ play }) => {
 
 const Reviews: FC<{ playId: number | undefined }> = ({ playId }) => {
   const reviewsByPlayId = useReviewsByPlayId({ playId })
+  const timeTextColor = useColorModeValue('gray.600', 'gray.500')
 
   return (
     <>
@@ -87,10 +91,6 @@ const Reviews: FC<{ playId: number | undefined }> = ({ playId }) => {
               <CardBody>
                 <Stack mt="6" spacing="3">
                   <Heading size="md">{review.title}</Heading>
-                  <Text>
-                    {review.description} - {review.rating}
-                  </Text>
-
                   <div>
                     <Rating
                       size={4}
@@ -102,6 +102,11 @@ const Reviews: FC<{ playId: number | undefined }> = ({ playId }) => {
                       viewRating={review.rating}
                     />
                   </div>
+
+                  <Text>
+                    {review.description} - {review.rating}
+                  </Text>
+                  <Text textColor={timeTextColor}>{timeAgo(review.createdAt)}</Text>
                 </Stack>
               </CardBody>
             </Card>
@@ -144,27 +149,30 @@ const Play: NextPage = () => {
                       {`${play.metadata.MatchHomeTeam} ${play.metadata.MatchHomeScore} - ${play.metadata.MatchAwayScore} ${play.metadata.MatchAwayTeam}`}
                     </Text>
                   </Stack>
+
+                  <Rating
+                    size={6}
+                    icon="star"
+                    scale={5}
+                    fillColor="gold"
+                    strokeColor="grey"
+                    viewOnly
+                    viewRating={
+                      (reviewAverage.data && reviewAverage.data._avg.rating) ||
+                      0
+                    }
+                  />
+                  <Center>
+                    {(reviewAverage.data && reviewAverage.data._avg.rating) ||
+                      0}{' '}
+                    - {reviewAverage.data && reviewAverage.data._count.rating}{' '}
+                    reviews
+                  </Center>
                 </CardBody>
               </Card>
             </Center>
 
-            <Rating
-              size={6}
-              icon="star"
-              scale={5}
-              fillColor="gold"
-              strokeColor="grey"
-              viewOnly
-              viewRating={
-                (reviewAverage.data && reviewAverage.data._avg.rating) || 0
-              }
-            />
-            <Center>
-              {(reviewAverage.data && reviewAverage.data._avg.rating) || 0} -{' '}
-              {reviewAverage.data && reviewAverage.data._count.rating} reviews
-            </Center>
-
-            <ReviewForm />
+            <ReviewFormModal />
 
             <Reviews playId={playId} />
           </VStack>

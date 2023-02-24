@@ -1,6 +1,5 @@
 import {
   Button,
-  Center,
   Image,
   Modal,
   ModalBody,
