@@ -10,6 +10,16 @@ export type VideoType =
 
 export type Language = 'default' | 'es'
 
+export interface NftEditions {
+  infoList: InfoList[]
+}
+
+export interface InfoList {
+  name: null
+  number: string
+  max: string
+}
+
 export interface EditionData {
   id: string
   seriesID: string

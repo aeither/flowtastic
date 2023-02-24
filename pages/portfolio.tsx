@@ -4,6 +4,7 @@ import { useDB } from '@/libs/hooks/use-db'
 import {
   useCollectionIDs,
   useMomentProperties,
+  useNftEditions,
   useNftMetadata,
 } from '@/libs/hooks/use-flow'
 import { useStore } from '@/libs/store'
@@ -18,6 +19,7 @@ import {
   Image,
   SimpleGrid,
   Stack,
+  Tag,
   Text,
   useColorModeValue,
   VStack,
@@ -39,12 +41,17 @@ export const Moment: FC<{ id: string }> = ({ id }) => {
     momentNFT: id,
     targetAddress: userAddress.data && userAddress.data.address,
   })
+  const nftEditions = useNftEditions({
+    momentNFT: id,
+    targetAddress: userAddress.data && userAddress.data.address,
+  })
+  console.log('🚀 ~ file: portfolio.tsx:47 ~ nftEditions:', nftEditions)
 
   const cardBorderColor = useColorModeValue('white', 'gray.800')
 
   return (
     <>
-      {nftMetadata.data && momentProperties.data && (
+      {nftMetadata.data && momentProperties.data && nftEditions.data && (
         <VStack>
           <Card
             maxW="sm"
@@ -61,11 +68,12 @@ export const Moment: FC<{ id: string }> = ({ id }) => {
               <Stack mt="6" spacing="3">
                 <Heading size="md">{nftMetadata.data.name}</Heading>
                 <Text>{nftMetadata.data.description}</Text>
+                <Tag w={'fit-content'} borderRadius="full" colorScheme="teal">
+                  {`${Number(momentProperties.data[2]).toFixed(0)}/${Number(
+                    nftEditions.data.infoList[0]?.max
+                  )}`}
+                </Tag>
                 <Text>
-                  Serial number: {Number(momentProperties.data[2]).toFixed(0)}
-                </Text>
-                <Text>
-                  Minted:{' '}
                   {`${new Date(
                     Number(momentProperties.data[3]) * 1000 || 0
                   ).getMonth()} ${new Date(
@@ -120,9 +128,9 @@ const Portfolio: NextPage = () => {
                 {hasCopied ? 'Copied' : 'Copy'}
               </Button>
             </HStack>
-            {isLoggedIn ? (
-              <>
-                <HStack p={4}>
+            <HStack p={4}>
+              {isLoggedIn ? (
+                <>
                   <Button
                     onClick={async () => {
                       const sigs = await (signUserMessage &&
@@ -148,17 +156,17 @@ const Portfolio: NextPage = () => {
                   >
                     Logout
                   </Button>
-                </HStack>
-              </>
-            ) : (
-              <Button
-                onClick={async () => {
-                  await login()
-                }}
-              >
-                Connect Wallet
-              </Button>
-            )}
+                </>
+              ) : (
+                <Button
+                  onClick={async () => {
+                    await login()
+                  }}
+                >
+                  Connect Wallet
+                </Button>
+              )}
+            </HStack>
           </VStack>
         </Center>
 

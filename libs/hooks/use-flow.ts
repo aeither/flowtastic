@@ -1,5 +1,6 @@
 import {
   EditionData,
+  NftEditions,
   SeriesData,
   type NFTMetadataDisplay,
   type NFTMetadataMedias,
@@ -237,6 +238,45 @@ export const useNftMetadata = ({
     },
   })
   return nftMetadata
+}
+/**
+ * /////////////////////////////////////////////////////////////////////
+ * /////////////////////////////////////////////////////////////////////
+ */
+export const useNftEditions = ({
+  momentNFT,
+  targetAddress,
+}: {
+  momentNFT: string
+  targetAddress: string | null | undefined
+}) => {
+  const CADENCE_SCRIPT_NFTMetadataDisplay = `
+  import Golazos from 0xGOLAZOSADDRESS
+  import MetadataViews from 0xMETADATAVIEWSADDRESS
+  
+  pub fun main(address: Address, id: UInt64): MetadataViews.Editions {
+      let account = getAccount(address)
+  
+      let collectionRef = account.getCapability(Golazos.CollectionPublicPath)
+              .borrow<&{Golazos.MomentNFTCollectionPublic}>()
+              ?? panic("Could not borrow capability from public collection")
+  
+      let nft = collectionRef.borrowMomentNFT(id: id)
+              ?? panic("Couldn't borrow momentNFT")
+  
+      return nft.resolveView(Type<MetadataViews.Editions>())! as! MetadataViews.Editions
+  }
+  `
+  const nftEditions = useScript<NftEditions>({
+    cadence: CADENCE_SCRIPT_NFTMetadataDisplay,
+    args: (arg, t) => [arg(targetAddress, t.Address), arg(momentNFT, t.UInt64)],
+    options: {
+      enabled: !!momentNFT && !!targetAddress,
+      cacheTime: Infinity,
+      staleTime: Infinity,
+    },
+  })
+  return nftEditions
 }
 /**
  * /////////////////////////////////////////////////////////////////////
