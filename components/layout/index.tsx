@@ -10,6 +10,7 @@ import {
   Spacer,
   useBreakpointValue,
   useColorMode,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { useSession } from 'next-auth/react'
 import Head from 'next/head'
@@ -24,7 +25,8 @@ export default function Layout({ children }: { children: ReactNode }) {
   const { colorMode, toggleColorMode } = useColorMode()
   const isMobile = useBreakpointValue({ base: true, md: false }, { ssr: false })
   // sign in modal with signIn("google");
-
+  const navbarBgColor = useColorModeValue('gray.50', 'gray.800')
+  
   return (
     <div>
       <Head>
@@ -34,15 +36,21 @@ export default function Layout({ children }: { children: ReactNode }) {
       </Head>
 
       {/* Navbar */}
-      <Flex w="full" p={4} minWidth="max-content" alignItems="center" gap="2">
+      <Flex
+        zIndex={50}
+        blur="md"
+        bg={navbarBgColor}
+        pos={'fixed'}
+        w="full"
+        p={4}
+        minWidth="max-content"
+        alignItems="center"
+        gap="2"
+      >
         {isMobile ? (
           <>
             <MobileDrawer />
-            <Link
-              _hover={{ textDecoration: 'none' }}
-              as={NextLink}
-              href="/golazos"
-            >
+            <Link _hover={{ textDecoration: 'none' }} as={NextLink} href="/golazos">
               <Box p="2">
                 <Heading size="md">Flowtastic</Heading>
               </Box>
@@ -50,20 +58,12 @@ export default function Layout({ children }: { children: ReactNode }) {
           </>
         ) : (
           <>
-            <Link
-              _hover={{ textDecoration: 'none' }}
-              as={NextLink}
-              href="/golazos"
-            >
+            <Link _hover={{ textDecoration: 'none' }} as={NextLink} href="/golazos">
               <Box p="2">
                 <Heading size="md">Flowtastic</Heading>
               </Box>
             </Link>
-            <Link
-              _hover={{ textDecoration: 'none' }}
-              as={NextLink}
-              href="/golazos"
-            >
+            <Link _hover={{ textDecoration: 'none' }} as={NextLink} href="/golazos">
               <Button variant={'ghost'}>Golazos</Button>
             </Link>
             <Button variant={'ghost'} color="gray.400" disabled>
@@ -85,13 +85,10 @@ export default function Layout({ children }: { children: ReactNode }) {
             onClick={toggleColorMode}
             icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
           />
-          {!session && status !== 'loading' ? (
-            <SignInModal />
-          ) : (
-            <UserDropdown />
-          )}
+          {!session && status !== 'loading' ? <SignInModal /> : <UserDropdown />}
         </ButtonGroup>
       </Flex>
+      <Box h="72px"></Box>
       <main>{children}</main>
 
       {/* Footer */}
