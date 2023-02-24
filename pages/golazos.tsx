@@ -11,15 +11,17 @@ import {
   Center,
   Divider,
   Heading,
+  HStack,
   Image,
   SimpleGrid,
   Stack,
+  Tag,
   Text,
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
 import { type NextPage } from 'next'
-import { FC } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import NextLink from 'next/link'
 import { Link } from '@chakra-ui/react'
@@ -49,8 +51,20 @@ export const CardRating: FC<{ playId: number }> = ({ playId }) => {
 }
 
 const Home: NextPage = () => {
-  const { allPlays, allSetNames } = useFlow()
-  const cardBorderColor = useColorModeValue('white', 'gray.800')
+  const [selectedSet, setSelectedSet] = useState<string>()
+  const { allPlays, allSetDatas, allEditions } = useFlow()
+  console.log('🚀 ~ file: golazos.tsx:53 ~ allSetDatas:', allSetDatas)
+  const cardBorderColor = useColorModeValue('gray.200', 'gray.800')
+
+  const filteredEditions = useMemo(() => {
+    let res = allEditions.data
+    if (allEditions.data && selectedSet) {
+      res = allEditions.data.filter((edition) => {
+        return edition.setID === selectedSet
+      })
+    }
+    return res
+  }, [selectedSet])
 
   return (
     <>
@@ -65,14 +79,20 @@ const Home: NextPage = () => {
         />
         <VStack h={'full'} pos={'relative'} align={'center'} justify={'center'}>
           <Heading>Get Started</Heading>
-          <Text>Learn from your moments.</Text>
-          <Link as={NextLink} href="/collection">
+          <Text>Explore your moments.</Text>
+          <Link
+            as={NextLink}
+            _hover={{
+              textDecoration: 'none',
+            }}
+            href="/collection"
+          >
             <Button>Go to Collection</Button>
           </Link>
         </VStack>
       </Box>
       <Heading as="h2" size="xl" p={4}>
-        Set
+        Sets
       </Heading>
       <Box>
         <Swiper
@@ -83,10 +103,23 @@ const Home: NextPage = () => {
           }}
           // modules={[Pagination]}
         >
-          {allSetNames.data &&
-            allSetNames.data.map((set) => (
-              <SwiperSlide key={set}>
-                <Card mx={2} minH="24">
+          {allSetDatas.data &&
+            allSetDatas.data.map((setData) => (
+              <SwiperSlide key={setData.id}>
+                <Card
+                  mx={2}
+                  minH="24"
+                  border={'2px'}
+                  borderColor={selectedSet === setData.id ? 'teal.400' : cardBorderColor}
+                  _hover={{ borderColor: 'teal.400' }}
+                  onClick={() => {
+                    if (selectedSet === setData.id) {
+                      setSelectedSet(undefined)
+                    } else {
+                      setSelectedSet(setData.id)
+                    }
+                  }}
+                >
                   <CardBody
                     display={'flex'}
                     alignItems="center"
@@ -95,7 +128,7 @@ const Home: NextPage = () => {
                     cursor={'pointer'}
                   >
                     <Center>
-                      <Text>{set}</Text>
+                      <Text>{setData.name}</Text>
                     </Center>
                   </CardBody>
                 </Card>
@@ -109,44 +142,63 @@ const Home: NextPage = () => {
       </Heading>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} px={4}>
         {allPlays.data &&
-          allPlays.data.map((play) => (
-            <>
-              <Center>
-                <Card
-                  maxW="sm"
-                  border={'2px'}
-                  borderColor={cardBorderColor}
-                  _hover={{ borderColor: 'teal.400' }}
-                >
-                  <CardBody>
-                    <Image
-                      src={getPlayImage(play.metadata.PlayDataID, 'capture_Hero_Black')}
-                      alt={play.metadata.PlayDataID}
-                      borderRadius="lg"
-                    />
-                    <Stack mt="6" spacing="3">
-                      <Heading minH={'16'} size="md">
-                        {`${play.metadata.PlayerFirstName} ${play.metadata.PlayerLastName}`}
-                      </Heading>
-                      <Text>
-                        {`${play.metadata.PlayType} - ${new Date(
-                          play.metadata.MatchDate,
-                        ).getFullYear()}`}
-                      </Text>
-                      <Text minH={12}>
-                        {`${play.metadata.MatchHomeTeam} ${play.metadata.MatchHomeScore} - ${play.metadata.MatchAwayScore} ${play.metadata.MatchAwayTeam}`}
-                      </Text>
-                      <CardRating playId={Number(play.id)} />
-                    </Stack>
-                  </CardBody>
-                  <Divider />
-                  <NextLink href={`/play?playId=${play.id}`}>
-                    <ViewDetailsButton playId={play.id} />
-                  </NextLink>
-                </Card>
-              </Center>
-            </>
-          ))}
+          filteredEditions &&
+          filteredEditions.map((edition) => {
+            const play = allPlays.data[Number(edition.playID)]
+
+            return (
+              <>
+                {play && (
+                  <Center>
+                    <Card
+                      maxW="sm"
+                      border={'2px'}
+                      borderColor={cardBorderColor}
+                      _hover={{ borderColor: 'teal.400' }}
+                    >
+                      <CardBody>
+                        <Image
+                          src={getPlayImage(
+                            play.metadata.PlayDataID,
+                            'capture_Hero_Black',
+                          )}
+                          alt={play.metadata.PlayDataID}
+                          borderRadius="lg"
+                        />
+                        <Stack mt="6" spacing="3">
+                          <HStack>
+                            <Tag w={'fit-content'} borderRadius="full" colorScheme="blue">
+                              {edition.numMinted}/{edition.maxMintSize}
+                            </Tag>
+                            <Tag w={'fit-content'} borderRadius="full" colorScheme="pink">
+                              {edition.tier}
+                            </Tag>
+                          </HStack>
+                          <Heading minH={'16'} size="md">
+                            {`${play.metadata.PlayerFirstName} ${play.metadata.PlayerLastName}`}
+                          </Heading>
+                          <Text>
+                            {`${play.metadata.PlayType} - ${new Date(
+                              play.metadata.MatchDate,
+                            ).getFullYear()}`}
+                          </Text>
+                          <Text minH={12}>
+                            {`${play.metadata.MatchHomeTeam} ${play.metadata.MatchHomeScore} - ${play.metadata.MatchAwayScore} ${play.metadata.MatchAwayTeam}`}
+                          </Text>
+
+                          <CardRating playId={Number(play.id)} />
+                        </Stack>
+                      </CardBody>
+                      <Divider />
+                      <NextLink href={`/play?playId=${play.id}`}>
+                        <ViewDetailsButton playId={play.id} />
+                      </NextLink>
+                    </Card>
+                  </Center>
+                )}
+              </>
+            )
+          })}
       </SimpleGrid>
     </>
   )

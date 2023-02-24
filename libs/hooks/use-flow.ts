@@ -1,7 +1,7 @@
 import {
   EditionData,
-  NftEditions,
   SeriesData,
+  type NftEditions,
   type NFTMetadataDisplay,
   type NFTMetadataMedias,
   type PlayData,
@@ -310,6 +310,32 @@ export function useFlow() {
    * /////////////////////////////////////////////////////////////////////
    * /////////////////////////////////////////////////////////////////////
    */
+  const CADENCE_SCRIPT_ALL_SET_DATAS = `
+import Golazos from 0xGOLAZOSADDRESS
+
+pub fun main(): [Golazos.SetData] {
+    let sets: [Golazos.SetData] = []
+    var id: UInt64 = 1
+    // Note < , as nextSetID has not yet been used
+    while id < Golazos.nextSetID {
+        sets.append(Golazos.getSetData(id: id)!)
+        id = id + 1
+    }
+    return sets
+}
+  `
+  const allSetDatas = useScript<SetData[]>({
+    cadence: CADENCE_SCRIPT_ALL_SET_DATAS,
+    args: (arg, t) => [],
+    options: {
+      cacheTime: Infinity,
+      staleTime: Infinity,
+    },
+  })
+  /**
+   * /////////////////////////////////////////////////////////////////////
+   * /////////////////////////////////////////////////////////////////////
+   */
   const CADENCE_SCRIPT_ALL_SET_NAMES = `
   import Golazos from 0xGOLAZOSADDRESS
 
@@ -318,7 +344,7 @@ export function useFlow() {
   }
   `
   const allSetNames = useScript<string[]>({
-    cadence: CADENCE_SCRIPT_ALL_SET_NAMES,
+    cadence: CADENCE_SCRIPT_ALL_SET_DATAS,
     args: (arg, t) => [],
     options: {
       cacheTime: Infinity,
@@ -452,6 +478,7 @@ export function useFlow() {
     // usePlayData, // Plays: Details
     // useTraits,
     allPlays, // Plays: Last X plays
+    allSetDatas,
     allSetNames, // Sets: list by content types
     setData, // Sets: single set data
     allSeriesNames,
