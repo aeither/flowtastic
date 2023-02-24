@@ -27,7 +27,6 @@ specifiers:
   ms: ^2.1.3
   next: 13.1.6
   next-auth: ^4.19.0
-  posthog-js: ^1.46.2
   prettier: ^2.8.4
   prisma: ^4.9.0
   react: 18.2.0
@@ -60,7 +59,6 @@ dependencies:
   ms: 2.1.3
   next: 13.1.6_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.19.2_3vryta7zmbcsw4rrqf4axjqggm
-  posthog-js: 1.46.2
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-hook-form: 7.43.1_react@18.2.0
@@ -2851,10 +2849,6 @@ packages:
       reusify: 1.0.4
     dev: true
 
-  /fflate/0.4.8:
-    resolution: {integrity: sha512-FJqqoDBR00Mdj9ppamLa/Y7vxm+PRmNWA67N846RvsoYVMKB4q3y/de5PA7gUmRMYK/8CMz2GDZQmCRN1wBcWA==}
-    dev: false
-
   /file-entry-cache/6.0.1:
     resolution: {integrity: sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -3762,13 +3756,6 @@ packages:
       source-map-js: 1.0.2
     dev: false
 
-  /posthog-js/1.46.2:
-    resolution: {integrity: sha512-MQpjuM+hmRKVXgp7A9nQYD2ZfJHMkPwb1JLoQLrtKP2QPOGgoP5d9MKy+lPjjgGeHCvVGqjuoyzLir0+JvGm+A==}
-    dependencies:
-      fflate: 0.4.8
-      rrweb-snapshot: 1.1.14
-    dev: false
-
   /preact-render-to-string/5.2.6_preact@10.12.1:
     resolution: {integrity: sha512-JyhErpYOvBV1hEPwIxc/fHWXPfnEGdRKxc8gFdAZ7XV4tlzyzG847XAyEZqoDnynP88akM4eaHcSOzNcLWFguw==}
     peerDependencies:
@@ -4032,10 +4019,6 @@ packages:
     dependencies:
       glob: 7.2.3
     dev: true
-
-  /rrweb-snapshot/1.1.14:
-    resolution: {integrity: sha512-eP5pirNjP5+GewQfcOQY4uBiDnpqxNRc65yKPW0eSoU1XamDfc4M8oqpXGMyUyvLyxFDB0q0+DChuxxiU2FXBQ==}
-    dev: false
 
   /run-parallel/1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
