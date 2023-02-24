@@ -4,11 +4,10 @@ import { useReviewAverage } from '@/libs/hooks/use-db'
 import { useFlow } from '@/libs/hooks/use-flow'
 import { getPlayImage } from '@/libs/utils/helpers'
 import {
+  Box,
   Button,
-  ButtonGroup,
   Card,
   CardBody,
-  CardFooter,
   Center,
   Divider,
   Heading,
@@ -17,10 +16,13 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  VStack,
 } from '@chakra-ui/react'
 import { type NextPage } from 'next'
-import NextLink from 'next/link'
 import { FC } from 'react'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import NextLink from 'next/link'
+import { Link } from '@chakra-ui/react'
 
 export const CardRating: FC<{ playId: number }> = ({ playId }) => {
   const reviewAverage = useReviewAverage({
@@ -47,14 +49,55 @@ export const CardRating: FC<{ playId: number }> = ({ playId }) => {
 }
 
 const Home: NextPage = () => {
-  const { allPlays } = useFlow()
+  const { allPlays, allSetNames } = useFlow()
   const cardBorderColor = useColorModeValue('white', 'gray.800')
 
   return (
     <>
+      <Box pos={'relative'} w="full" h="400px">
+        <Image
+          fit={'cover'}
+          pos={'absolute'}
+          src="/hero.png"
+          alt="hero"
+          w="full"
+          h={'full'}
+        />
+        <VStack h={'full'} pos={'relative'} align={'center'} justify={'center'}>
+          <Heading>Get Started</Heading>
+          <Text>Learn from your moments.</Text>
+          <Link as={NextLink} href="/collection">
+            <Button>Go to Collection</Button>
+          </Link>
+        </VStack>
+      </Box>
       <Heading as="h2" size="xl" p={4}>
-        Traits
+        Set
       </Heading>
+      <Box>
+        <Swiper
+          slidesPerView={2.5}
+          spaceBetween={0}
+          pagination={{
+            clickable: true,
+          }}
+          // modules={[Pagination]}
+        >
+          {allSetNames.data &&
+            allSetNames.data.map((set) => (
+              <SwiperSlide key={set}>
+                <Card mx={2} minH="24">
+                  <CardBody h={'full'}>
+                    <Center>
+                      <Text>{set}</Text>
+                    </Center>
+                  </CardBody>
+                </Card>
+              </SwiperSlide>
+            ))}
+        </Swiper>
+      </Box>
+
       <Heading as="h2" size="xl" p={4}>
         View All
       </Heading>

@@ -303,9 +303,6 @@ export const usePlayData = ({ playId }: { playId: number | undefined }) => {
 }
 
 export function useFlow() {
-  // const targetAddress = useStore((state) => state.targetAddress)
-  // const momentNFT = useStore((state) => state.momentNFT)
-  const playId = useStore((state) => state.playId)
   const golazosSetName = useStore((state) => state.golazosSetName)
   const seriesName = useStore((state) => state.seriesName)
 
