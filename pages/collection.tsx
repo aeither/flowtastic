@@ -7,7 +7,6 @@ import {
   useNftEditions,
   useNftMetadata,
 } from '@/libs/hooks/use-flow'
-import { useStore } from '@/libs/store'
 import {
   Button,
   Card,
@@ -29,7 +28,7 @@ import { type NextPage } from 'next'
 import NextLink from 'next/link'
 import { FC } from 'react'
 
-const MESSAGE = Buffer.from('Use as Portfolio wallet').toString('hex')
+const MESSAGE = Buffer.from('Use as Collection wallet').toString('hex')
 
 export const Moment: FC<{ id: string }> = ({ id }) => {
   const { userAddress } = useDB()
@@ -45,7 +44,6 @@ export const Moment: FC<{ id: string }> = ({ id }) => {
     momentNFT: id,
     targetAddress: userAddress.data && userAddress.data.address,
   })
-  console.log('🚀 ~ file: portfolio.tsx:47 ~ nftEditions:', nftEditions)
 
   const cardBorderColor = useColorModeValue('white', 'gray.800')
 
@@ -95,7 +93,7 @@ export const Moment: FC<{ id: string }> = ({ id }) => {
   )
 }
 
-const Portfolio: NextPage = () => {
+const Collection: NextPage = () => {
   const { login, isLoggedIn, isReady, logout, user, signUserMessage } =
     useAuthentication()
   const { userAddress, addAddress } = useDB()
@@ -177,4 +175,4 @@ const Portfolio: NextPage = () => {
   )
 }
 
-export default Portfolio
+export default Collection

@@ -1,14 +1,6 @@
-import React, { ForwardedRef, useEffect, useState } from 'react'
-import {
-  Box,
-  Button,
-  HStack,
-  Icon,
-  IconButton,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons'
+import { Button, HStack } from '@chakra-ui/react'
+import React, { ForwardedRef, useEffect, useState } from 'react'
 import { UseFormSetValue } from 'react-hook-form'
 import { ReviewFormInput } from '../home/review-form'
 
@@ -25,17 +17,8 @@ interface RatingProps {
 
 const Rating = React.forwardRef(
   (
-    {
-      size,
-      icon,
-      scale,
-      fillColor,
-      strokeColor,
-      setValue,
-      viewOnly,
-      viewRating,
-    }: RatingProps,
-    ref: ForwardedRef<HTMLInputElement>
+    { size, scale, fillColor, strokeColor, setValue, viewOnly, viewRating }: RatingProps,
+    ref: ForwardedRef<HTMLInputElement>,
   ) => {
     const buttons = []
     const [rating, setRating] = useState(0)
@@ -63,16 +46,6 @@ const Rating = React.forwardRef(
           boxSize={size}
           fillOpacity={fill ? '100%' : '0'}
         />
-        // <IconButton
-        //   name={icon}
-        //   size={`${size}px`}
-        //   color={fillColor}
-        //   stroke={strokeColor}
-        //   background="transparent"
-        //   _hover={{ bg: 'transparent' }}
-        //   icon={<StarIcon boxSize={'8'} fillOpacity={fill ? '100%' : '0'} />}
-        //   aria-label={''} //   onClick={onClick}
-        // />
       )
     }
 
@@ -81,11 +54,8 @@ const Rating = React.forwardRef(
         <Button
           as="button"
           aria-label={`Rate ${idx}`}
-          // height={`${size}px`}
-          // width={`${size}px`}
           variant={'unstyled'}
-          size={{ sm: 'sm', md: 'md' }}
-          // mx={1}
+          size={{ base: 'sm', md: 'md' }}
           onClick={() => (viewOnly ? {} : onClick(idx))}
           _focus={{ outline: 0 }}
         >
@@ -102,17 +72,9 @@ const Rating = React.forwardRef(
       <HStack my={2} justify="center" spacing={0} gap={0}>
         <input name="rating" type="hidden" value={rating} ref={ref} />
         {buttons}
-        {/* <Box width={`${size * 1.5}px`} textAlign="center">
-          <Text fontSize="sm" textTransform="uppercase">
-            Rating
-          </Text>
-          <Text fontSize="2xl" fontWeight="semibold" lineHeight="1.2em">
-            {rating}
-          </Text>
-        </Box> */}
       </HStack>
     )
-  }
+  },
 )
 
 Rating.displayName = 'Rating'

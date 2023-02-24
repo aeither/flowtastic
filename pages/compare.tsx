@@ -117,7 +117,7 @@ export const MomentA: FC = () => {
   )
 }
 
-const Portfolio: NextPage = () => {
+const Collection: NextPage = () => {
   const { userAddress, addAddress } = useDB()
 
   return (
@@ -135,4 +135,4 @@ const Portfolio: NextPage = () => {
   )
 }
 
-export default Portfolio
+export default Collection

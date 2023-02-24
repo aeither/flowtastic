@@ -33,9 +33,9 @@ export const UserDropdown: FC = () => {
           <Link
             _hover={{ textDecoration: 'none' }}
             as={NextLink}
-            href="/portfolio"
+            href="/collection"
           >
-            <MenuItem>Portfolio</MenuItem>
+            <MenuItem>Collection</MenuItem>
           </Link>
           <MenuItem onClick={() => void signOut({ redirect: false })}>
             Logout
