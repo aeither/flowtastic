@@ -87,7 +87,13 @@ const Home: NextPage = () => {
             allSetNames.data.map((set) => (
               <SwiperSlide key={set}>
                 <Card mx={2} minH="24">
-                  <CardBody h={'full'}>
+                  <CardBody
+                    display={'flex'}
+                    alignItems="center"
+                    justifyContent={'center'}
+                    h={'full'}
+                    cursor={'pointer'}
+                  >
                     <Center>
                       <Text>{set}</Text>
                     </Center>
