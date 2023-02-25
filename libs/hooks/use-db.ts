@@ -3,34 +3,26 @@ import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { api } from '../api'
 
-export const useReviewAverage = ({
-  playId,
-}: {
-  playId: number | undefined
-}) => {
+export const useReviewAverage = ({ playId }: { playId: number | undefined }) => {
   const reviewAverage = api.db.reviewAverage.useQuery(
     { playId: playId! },
     {
       enabled: !!playId,
       staleTime: Infinity,
       cacheTime: Infinity,
-    }
+    },
   )
   return reviewAverage
 }
 
-export const useReviewsByPlayId = ({
-  playId,
-}: {
-  playId: number | undefined
-}) => {
+export const useReviewsByPlayId = ({ playId }: { playId: number | undefined }) => {
   const reviewsByPlayId = api.db.reviewsByPlayId.useQuery(
     { playId: playId! },
     {
       enabled: !!playId,
       staleTime: Infinity,
       cacheTime: Infinity,
-    }
+    },
   )
   return reviewsByPlayId
 }
@@ -71,6 +63,8 @@ export function useDB() {
     },
   })
 
+  const updateReview = api.db.updateReview.useMutation()
+
   const addAddress = api.db.addAddress.useMutation({
     onMutate() {
       toast.loading('Loading...')
@@ -90,6 +84,7 @@ export function useDB() {
   })
   return {
     createReview,
+    updateReview,
     addAddress,
     userAddress,
   }

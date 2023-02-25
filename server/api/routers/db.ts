@@ -8,7 +8,7 @@ export const dbRouter = createTRPCRouter({
     .input(
       z.object({
         playId: z.number(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       return await ctx.prisma.review.aggregate({
@@ -33,7 +33,7 @@ export const dbRouter = createTRPCRouter({
     .input(
       z.object({
         playId: z.number(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       return await ctx.prisma.review.findMany({
@@ -63,7 +63,7 @@ export const dbRouter = createTRPCRouter({
         rating: z.number(),
         title: z.string(),
         description: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const { playId, rating, title, description } = input
@@ -84,11 +84,38 @@ export const dbRouter = createTRPCRouter({
       })
     }),
 
+  updateReview: protectedProcedure
+    .input(
+      z.object({
+        reviewId: z.number(),
+        onChain: z.boolean(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { reviewId, onChain } = input
+      /**
+       * Prisma DB check and update usage
+       */
+      const userId = ctx.session.user.id
+      const user = await ctx.prisma.user.findUnique({ where: { id: userId } })
+      if (!user) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'User not found in database.',
+        })
+      }
+
+      return await ctx.prisma.review.update({
+        where: { id: reviewId },
+        data: { onChain: onChain },
+      })
+    }),
+
   addAddress: protectedProcedure
     .input(
       z.object({
         address: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const { address } = input

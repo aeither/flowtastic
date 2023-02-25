@@ -1,28 +1,29 @@
 import { MediaModal } from '@/components/home/media-modal'
-import { ReviewForm } from '@/components/home/review-form'
+import { ReviewFormModal } from '@/components/home/review-form-modal'
 import Rating from '@/components/shared/rating'
-import { useReviewAverage, useReviewsByPlayId } from '@/libs/hooks/use-db'
-import { usePlayData } from '@/libs/hooks/use-flow'
+import { useDB, useReviewAverage, useReviewsByPlayId } from '@/libs/hooks/use-db'
+import { usePlayData, useUploadReview } from '@/libs/hooks/use-flow'
 import { ImageType, PlayData, VideoType } from '@/libs/types'
 import { getPlayImage, getPlayVideo, timeAgo } from '@/libs/utils/helpers'
 import {
+  Button,
   Card,
   CardBody,
   Center,
   Heading,
   Stack,
   Text,
-  useColorMode,
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
 import { type NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
+import { toast } from 'react-hot-toast'
 import { Navigation, Pagination } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { useCopyToClipboard } from '@/libs/hooks/use-copy-to-clipboard'
-import { ReviewFormModal } from '@/components/home/review-form-modal'
+import { useAccount, useAuthentication } from '@flowity/react'
+import { useSession } from 'next-auth/react'
 
 const IMAGE_MEDIA_TYPES = [
   'capture_Hero_Black',
@@ -81,6 +82,11 @@ const MediaSlider: FC<{ play: PlayData }> = ({ play }) => {
 const Reviews: FC<{ playId: number | undefined }> = ({ playId }) => {
   const reviewsByPlayId = useReviewsByPlayId({ playId })
   const timeTextColor = useColorModeValue('gray.600', 'gray.500')
+  const uploadReview = useUploadReview()
+  const { login, isLoggedIn, isReady, logout, user, signUserMessage } =
+    useAuthentication()
+  const { data } = useSession()
+  const { updateReview } = useDB()
 
   return (
     <>
@@ -107,6 +113,52 @@ const Reviews: FC<{ playId: number | undefined }> = ({ playId }) => {
                     {review.description} - {review.rating}
                   </Text>
                   <Text textColor={timeTextColor}>{timeAgo(review.createdAt)}</Text>
+
+                  {isLoggedIn ? (
+                    <Button
+                      onClick={async () => {
+                        const metadata = [
+                          { key: 'rating', value: review.rating.toString() },
+                          { key: 'title', value: review.title || '' },
+                          { key: 'description', value: review.description || '' },
+                          { key: 'editionID', value: review.playId.toString() || '' },
+                        ]
+
+                        const promise = uploadReview.mutateAsync({
+                          args: (arg, t) => [
+                            arg(
+                              metadata,
+                              t.Dictionary({ key: t.String, value: t.String }),
+                            ),
+                          ],
+                        })
+
+                        const promises = Promise.all([
+                          promise,
+                          updateReview.mutateAsync({
+                            onChain: true,
+                            reviewId: review.id,
+                          }),
+                        ])
+
+                        toast.promise(promises, {
+                          loading: 'Uploading...',
+                          success: 'Success!!!',
+                          error: 'Something went wront :(',
+                        })
+                      }}
+                    >
+                      Upload to Flow
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={async () => {
+                        await login()
+                      }}
+                    >
+                      Sign in Save on-chain
+                    </Button>
+                  )}
                 </Stack>
               </CardBody>
             </Card>

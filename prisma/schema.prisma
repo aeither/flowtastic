@@ -56,9 +56,10 @@ model Review {
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
     rating      Int
+    playId      Int
     title       String?
     description String?
-    playId      Int
+    onChain     Boolean? @default(false)
     user        User     @relation(fields: [userId], references: [id])
     userId      String
 

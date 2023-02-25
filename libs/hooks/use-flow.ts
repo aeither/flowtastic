@@ -7,9 +7,38 @@ import {
   type PlayData,
   type SetData,
 } from '@/libs/types'
-import { useScript } from '@flowity/react'
+import { useScript, useMutation } from '@flowity/react'
 import { useStore } from '../store'
 
+/**
+ * /////////////////////////////////////////////////////////////////////
+ * /////////////////////////////////////////////////////////////////////
+ */
+export const useUploadReview = () => {
+  const CADENCE_SCRIPT_UPLOAD_REVIEW = `
+      import Flowtastic from 0xFLOWTASTIC
+
+      transaction (metadata: {String: String}) {
+        prepare(acct: AuthAccount) {
+            if acct.borrow<&Flowtastic.Collection>(from: Flowtastic.ReviewCollectionStoragePath) != nil {
+                log("Collection exists!")
+            } else {
+                acct.save<@Flowtastic.Collection>(<-Flowtastic.createEmptyCollection(), to: Flowtastic.ReviewCollectionStoragePath)
+                acct.link<&{Flowtastic.CollectionPublic}>(Flowtastic.ReviewCollectionPublicPath, target: Flowtastic.ReviewCollectionStoragePath)
+            }
+    
+            let collection = acct.borrow<&Flowtastic.Collection>(from: Flowtastic.ReviewCollectionStoragePath)
+    
+            collection?.saveReview(review: <-Flowtastic.createReview(metadata: metadata))
+            log("Review created successfully, with message ")
+        }
+    }
+      `
+  const uploadReview = useMutation({
+    cadence: CADENCE_SCRIPT_UPLOAD_REVIEW,
+  })
+  return uploadReview
+}
 /**
  * /////////////////////////////////////////////////////////////////////
  * /////////////////////////////////////////////////////////////////////
@@ -21,7 +50,7 @@ export const useMedias = ({
   momentNFT: string
   targetAddress: string
 }) => {
-  const CADENCE_SCRIPT_NFTMetadataMedias = `
+  const CADENCE_SCRIPT_NFT_METADATA_MEDIAS = `
       import Golazos from 0xGOLAZOSADDRESS
       import MetadataViews from 0xMETADATAVIEWSADDRESS
       
@@ -39,7 +68,7 @@ export const useMedias = ({
       }
       `
   const medias = useScript<NFTMetadataMedias>({
-    cadence: CADENCE_SCRIPT_NFTMetadataMedias,
+    cadence: CADENCE_SCRIPT_NFT_METADATA_MEDIAS,
     args: (arg, t) => [arg(targetAddress, t.Address), arg(momentNFT, t.UInt64)],
     options: {
       enabled: !!momentNFT && !!targetAddress,

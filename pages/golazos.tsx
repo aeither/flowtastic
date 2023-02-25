@@ -53,9 +53,11 @@ export const CardRating: FC<{ playId: number }> = ({ playId }) => {
 const Home: NextPage = () => {
   const [selectedSet, setSelectedSet] = useState<string>()
   const { allPlays, allSetDatas, allEditions } = useFlow()
-  console.log('🚀 ~ file: golazos.tsx:53 ~ allSetDatas:', allSetDatas)
+  console.log('🚀 ~ file: golazos.tsx:56 ~ allPlays:', allPlays)
+  console.log('🚀 ~ file: golazos.tsx:56 ~ allEditions:', allEditions)
+  console.log('🚀 ~ file: golazos.tsx:56 ~ allSetDatas:', allSetDatas)
   const cardBorderColor = useColorModeValue('gray.200', 'gray.800')
-
+  
   const filteredEditions = useMemo(() => {
     let res = allEditions.data
     if (allEditions.data && selectedSet) {
@@ -64,7 +66,11 @@ const Home: NextPage = () => {
       })
     }
     return res
-  }, [selectedSet])
+  }, [allEditions.data, selectedSet])
+  console.log(
+    '🚀 ~ file: golazos.tsx:59 ~ filteredEditions ~ filteredEditions:',
+    filteredEditions,
+  )
 
   return (
     <>
