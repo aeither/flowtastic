@@ -43,6 +43,46 @@ export const useUploadReview = () => {
  * /////////////////////////////////////////////////////////////////////
  * /////////////////////////////////////////////////////////////////////
  */
+export const useAllReviewsByOwner = ({ address }: { address?: string }) => {
+  const CADENCE_SCRIPT_ALL_REVIEWS_BY_OWNER = `
+  import Flowtastic from 0xFLOWTASTIC
+
+  pub fun main(account: Address): [ReviewMetadata] {
+    let reviewOwner = getAccount(account)
+
+    let capability = reviewOwner.getCapability<&{Flowtastic.CollectionPublic}>(Flowtastic.ReviewCollectionPublicPath)
+
+    let publicRef = capability.borrow()
+            ?? panic("Could not borrow public reference")
+
+    let reviewIDs = publicRef.getIDs()
+
+    let reviews: [ReviewMetadata] = []
+
+    for reviewID in reviewIDs {
+        let review = publicRef.borrowReview(id: reviewID) ?? panic("this review does not exist")
+        let metadata = ReviewMetadata(id: review.id, rating: review.metadata["rating"]!, title: review.metadata["title"]!, description: review.metadata["description"]!, editionID: review.metadata["editionID"]!)
+        reviews.append(metadata)
+    }
+
+    return reviews
+}
+      `
+  const medias = useScript<NFTMetadataMedias>({
+    cadence: CADENCE_SCRIPT_ALL_REVIEWS_BY_OWNER,
+    args: (arg, t) => [arg(address, t.Address)],
+    options: {
+      enabled: !!address,
+      staleTime: Infinity,
+      cacheTime: Infinity,
+    },
+  })
+  return medias
+}
+/**
+ * /////////////////////////////////////////////////////////////////////
+ * /////////////////////////////////////////////////////////////////////
+ */
 export const useMedias = ({
   momentNFT,
   targetAddress,
