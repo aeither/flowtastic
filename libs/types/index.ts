@@ -20,6 +20,14 @@ export interface InfoList {
   max: string
 }
 
+export interface FlowtasticReview {
+  id: string
+  rating: string
+  title: string
+  description: string
+  editionID: string
+}
+
 export interface EditionData {
   id: string
   seriesID: string
