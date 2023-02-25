@@ -11,6 +11,7 @@ import {
   CardBody,
   Center,
   Heading,
+  HStack,
   Stack,
   Text,
   useColorModeValue,
@@ -24,6 +25,8 @@ import { Navigation, Pagination } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { useAccount, useAuthentication } from '@flowity/react'
 import { useSession } from 'next-auth/react'
+import { Review } from '@prisma/client'
+import { LockIcon } from '@chakra-ui/icons'
 
 const IMAGE_MEDIA_TYPES = [
   'capture_Hero_Black',
@@ -35,6 +38,70 @@ const VIDEO_MEDIA_TYPES = [
   'capture_Animated_Video_Popout_Black',
   'capture_Animated_Video_Idle_Black',
 ]
+
+const UploadOnChain: FC<{ review: Review; playId: number | undefined }> = ({
+  review,
+  playId,
+}) => {
+  const reviewsByPlayId = useReviewsByPlayId({ playId })
+  const uploadReview = useUploadReview()
+  const { login, isLoggedIn } = useAuthentication()
+  const { updateReview } = useDB()
+
+  return (
+    <>
+      {isLoggedIn ? (
+        <Button
+          onClick={async () => {
+            const metadata = [
+              { key: 'rating', value: review.rating.toString() },
+              { key: 'title', value: review.title || '' },
+              { key: 'description', value: review.description || '' },
+              { key: 'editionID', value: review.playId.toString() || '' },
+            ]
+
+            const promise = uploadReview.mutateAsync({
+              args: (arg, t) => [
+                arg(metadata, t.Dictionary({ key: t.String, value: t.String })),
+              ],
+            })
+
+            const promises = Promise.all([
+              promise,
+              updateReview.mutateAsync(
+                {
+                  onChain: true,
+                  reviewId: review.id,
+                },
+                {
+                  onSuccess() {
+                    reviewsByPlayId.refetch()
+                  },
+                },
+              ),
+            ])
+
+            toast.promise(promises, {
+              loading: 'Uploading...',
+              success: 'Success!!!',
+              error: 'Something went wront :(',
+            })
+          }}
+        >
+          Upload to Flow
+        </Button>
+      ) : (
+        <Button
+          onClick={async () => {
+            await login()
+          }}
+        >
+          Sign in Save on-chain
+        </Button>
+      )}
+    </>
+  )
+}
 
 const MediaSlider: FC<{ play: PlayData }> = ({ play }) => {
   return (
@@ -82,12 +149,8 @@ const MediaSlider: FC<{ play: PlayData }> = ({ play }) => {
 const Reviews: FC<{ playId: number | undefined }> = ({ playId }) => {
   const reviewsByPlayId = useReviewsByPlayId({ playId })
   const timeTextColor = useColorModeValue('gray.600', 'gray.500')
-  const uploadReview = useUploadReview()
-  const { login, isLoggedIn, isReady, logout, user, signUserMessage } =
-    useAuthentication()
   const { data } = useSession()
-  const { updateReview } = useDB()
-
+  
   return (
     <>
       {reviewsByPlayId.data &&
@@ -113,51 +176,21 @@ const Reviews: FC<{ playId: number | undefined }> = ({ playId }) => {
                     {review.description} - {review.rating}
                   </Text>
                   <Text textColor={timeTextColor}>{timeAgo(review.createdAt)}</Text>
-
-                  {isLoggedIn ? (
-                    <Button
-                      onClick={async () => {
-                        const metadata = [
-                          { key: 'rating', value: review.rating.toString() },
-                          { key: 'title', value: review.title || '' },
-                          { key: 'description', value: review.description || '' },
-                          { key: 'editionID', value: review.playId.toString() || '' },
-                        ]
-
-                        const promise = uploadReview.mutateAsync({
-                          args: (arg, t) => [
-                            arg(
-                              metadata,
-                              t.Dictionary({ key: t.String, value: t.String }),
-                            ),
-                          ],
-                        })
-
-                        const promises = Promise.all([
-                          promise,
-                          updateReview.mutateAsync({
-                            onChain: true,
-                            reviewId: review.id,
-                          }),
-                        ])
-
-                        toast.promise(promises, {
-                          loading: 'Uploading...',
-                          success: 'Success!!!',
-                          error: 'Something went wront :(',
-                        })
-                      }}
-                    >
-                      Upload to Flow
-                    </Button>
+                  {review.onChain === true ? (
+                    <>
+                      <HStack>
+                        <LockIcon />
+                        <Text>Securely stored on-chain</Text>
+                      </HStack>
+                    </>
                   ) : (
-                    <Button
-                      onClick={async () => {
-                        await login()
-                      }}
-                    >
-                      Sign in Save on-chain
-                    </Button>
+                    <>
+                      {data && data.user && data.user.id ? (
+                        <UploadOnChain review={review} playId={playId} />
+                      ) : (
+                        <></>
+                      )}
+                    </>
                   )}
                 </Stack>
               </CardBody>
