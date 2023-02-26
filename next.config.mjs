@@ -1,4 +1,5 @@
 // @ts-check
+import NextPWA from 'next-pwa'
 
 /**
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
@@ -6,9 +7,13 @@
  */
 !process.env.SKIP_ENV_VALIDATION && (await import('./env.mjs'))
 
+const inDevelopment = process.env.NODE_ENV === 'development'
+const withPWA = NextPWA({ dest: 'public', disable: inDevelopment })
+
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
+  swcMinify: true,
   images: {
     domains: ['assets.laligagolazos.com'],
   },
@@ -32,4 +37,4 @@ const config = {
     ]
   },
 }
-export default config
+export default withPWA(config)
