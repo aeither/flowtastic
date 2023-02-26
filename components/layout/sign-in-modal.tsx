@@ -16,6 +16,7 @@ import {
 import { signIn } from 'next-auth/react'
 import { FC, useState } from 'react'
 import { BeatLoader } from 'react-spinners'
+import Google from '../shared/icons/google'
 
 export const SignInModal: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -42,9 +43,24 @@ export const SignInModal: FC = () => {
                   void signIn('google')
                 }}
                 spinner={<BeatLoader size={8} color="white" />}
+                leftIcon={<Google className=''/>}
               >
                 Sign in with Google
               </Button>
+              {/* <Button
+                isLoading={signInClicked}
+                onClick={() => {
+                  setSignInClicked(true)
+                  void signIn('email', {
+                    email: '',
+                    redirect: false,
+                    callbackUrl: '/welcome',
+                  })
+                }}
+                spinner={<BeatLoader size={8} color="white" />}
+              >
+                Sign in with Email
+              </Button> */}
             </VStack>
           </ModalBody>
           <ModalFooter />
