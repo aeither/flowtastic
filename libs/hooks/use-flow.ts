@@ -105,7 +105,7 @@ export const useMedias = ({
   targetAddress,
 }: {
   momentNFT: string
-  targetAddress: string
+  targetAddress: string | null | undefined;
 }) => {
   const CADENCE_SCRIPT_NFT_METADATA_MEDIAS = `
       import Golazos from 0xGOLAZOSADDRESS

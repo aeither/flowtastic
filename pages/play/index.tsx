@@ -5,6 +5,7 @@ import { useDB, useReviewAverage, useReviewsByPlayId } from '@/libs/hooks/use-db
 import { usePlayData, useUploadReview } from '@/libs/hooks/use-flow'
 import { ImageType, PlayData, VideoType } from '@/libs/types'
 import { getPlayImage, getPlayVideo, timeAgo } from '@/libs/utils/helpers'
+import { LockIcon } from '@chakra-ui/icons'
 import {
   Button,
   Card,
@@ -17,16 +18,15 @@ import {
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
+import { useAuthentication } from '@flowity/react'
+import { Review } from '@prisma/client'
 import { type NextPage } from 'next'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { toast } from 'react-hot-toast'
 import { Navigation, Pagination } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { useAccount, useAuthentication } from '@flowity/react'
-import { useSession } from 'next-auth/react'
-import { Review } from '@prisma/client'
-import { LockIcon } from '@chakra-ui/icons'
 
 const IMAGE_MEDIA_TYPES = [
   'capture_Hero_Black',
@@ -150,7 +150,7 @@ const Reviews: FC<{ playId: number | undefined }> = ({ playId }) => {
   const reviewsByPlayId = useReviewsByPlayId({ playId })
   const timeTextColor = useColorModeValue('gray.600', 'gray.500')
   const { data } = useSession()
-  
+
   return (
     <>
       {reviewsByPlayId.data &&
@@ -202,7 +202,6 @@ const Reviews: FC<{ playId: number | undefined }> = ({ playId }) => {
 }
 
 const Play: NextPage = () => {
-  const router = useRouter()
   const { query } = useRouter()
   const playId = Number(query.playId) as number | undefined
   const reviewAverage = useReviewAverage({

@@ -12,6 +12,7 @@ import {
   Card,
   CardBody,
   Center,
+  Container,
   Divider,
   Heading,
   HStack,
@@ -64,8 +65,10 @@ export const Moment: FC<{ id: string }> = ({ id }) => {
                 borderRadius="lg"
               />
               <Stack mt="6" spacing="3">
-                <Heading size="md">{nftMetadata.data.name}</Heading>
-                <Text>{nftMetadata.data.description}</Text>
+                <Heading size="md" minH={'16'}>
+                  {nftMetadata.data.name}
+                </Heading>
+                <Text minH={'32'}>{nftMetadata.data.description}</Text>
                 <Tag w={'fit-content'} borderRadius="full" colorScheme="teal">
                   {`${Number(momentProperties.data[2]).toFixed(0)}/${Number(
                     nftEditions.data.infoList[0]?.max,
@@ -104,7 +107,7 @@ const Collection: NextPage = () => {
 
   return (
     <>
-      <main>
+      <Container maxW="container.xl">
         <Center>
           <VStack>
             <Heading as="h3" size="lg">
@@ -170,7 +173,7 @@ const Collection: NextPage = () => {
               </>
             ))}
         </SimpleGrid>
-      </main>
+      </Container>
     </>
   )
 }
