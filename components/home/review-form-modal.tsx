@@ -1,6 +1,6 @@
 import {
+  Box,
   Button,
-  Image,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -8,23 +8,33 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
+  useColorModeValue,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { signIn } from 'next-auth/react'
-import { FC, useState } from 'react'
-import { BeatLoader } from 'react-spinners'
+import { FC } from 'react'
 import { ReviewForm } from './review-form'
 
 export const ReviewFormModal: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-
+  const boxBgColor = useColorModeValue('gray.50', 'gray.800')
   return (
     <>
-      <Button mt={4} colorScheme="teal" onClick={onOpen}>
-        Write a Review
-      </Button>
+      <Box
+        position={{ base: 'fixed', md: 'relative' }}
+        boxShadow={{ base: 'dark-lg', md: 'none' }}
+        bgColor={boxBgColor}
+        zIndex={20}
+        bottom={0}
+        height="60px"
+        w="full"
+      >
+        <VStack mx={2} h={'full'} justify={'center'}>
+          <Button w={{ base: 'full', md: 'sm' }} colorScheme="teal" onClick={onOpen}>
+            Write a Review
+          </Button>
+        </VStack>
+      </Box>
 
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
