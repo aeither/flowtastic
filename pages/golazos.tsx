@@ -57,7 +57,7 @@ const Home: NextPage = () => {
   console.log('🚀 ~ file: golazos.tsx:56 ~ allEditions:', allEditions)
   console.log('🚀 ~ file: golazos.tsx:56 ~ allSetDatas:', allSetDatas)
   const cardBorderColor = useColorModeValue('gray.200', 'gray.800')
-  
+
   const filteredEditions = useMemo(() => {
     let res = allEditions.data
     if (allEditions.data && selectedSet) {
@@ -149,7 +149,7 @@ const Home: NextPage = () => {
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} px={4}>
         {allPlays.data &&
           filteredEditions &&
-          filteredEditions.map((edition) => {
+          filteredEditions.slice(0, 50).map((edition) => {
             const play = allPlays.data[Number(edition.playID)]
 
             return (
