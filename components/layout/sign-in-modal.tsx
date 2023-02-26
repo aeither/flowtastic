@@ -16,6 +16,7 @@ import {
 import { signIn } from 'next-auth/react'
 import { FC, useState } from 'react'
 import { BeatLoader } from 'react-spinners'
+import Discord from '../shared/icons/discord'
 import Google from '../shared/icons/google'
 
 export const SignInModal: FC = () => {
@@ -43,9 +44,21 @@ export const SignInModal: FC = () => {
                   void signIn('google')
                 }}
                 spinner={<BeatLoader size={8} color="white" />}
-                leftIcon={<Google className=''/>}
+                leftIcon={<Google className="" />}
               >
                 Sign in with Google
+              </Button>
+              <Button
+                isLoading={signInClicked}
+                onClick={() => {
+                  setSignInClicked(true)
+                  // Non-leaking Arrow Functions
+                  void signIn('discord')
+                }}
+                spinner={<BeatLoader size={8} color="white" />}
+                leftIcon={<Discord />}
+              >
+                Sign in with Discord
               </Button>
               {/* <Button
                 isLoading={signInClicked}
