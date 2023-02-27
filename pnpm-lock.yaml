@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@aeither/randomcolor': ^0.1.3
   '@chakra-ui/icons': ^2.0.17
   '@chakra-ui/react': ^2.5.1
   '@emotion/react': ^11.10.6
@@ -45,6 +46,7 @@ specifiers:
   zustand: ^4.3.3
 
 dependencies:
+  '@aeither/randomcolor': 0.1.3_react@18.2.0
   '@chakra-ui/icons': 2.0.17_n3dxrjldmk5gnycgnw7noyo5tu
   '@chakra-ui/react': 2.5.1_gc24nmtdp32tnvrub3rgrqhnlu
   '@emotion/react': 11.10.6_pmekkgnqduwlme35zpnqhenc34
@@ -91,6 +93,14 @@ devDependencies:
   typescript: 4.9.5
 
 packages:
+
+  /@aeither/randomcolor/0.1.3_react@18.2.0:
+    resolution: {integrity: sha512-VB373euvGm3d89Wnc8SgIahpbAL9O6DsTgVSo8eSYcsIU0DN0PnXrY2n6owjypXmaqt0LNbrLp8WpXpWbBq3yQ==}
+    peerDependencies:
+      react: ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /@ampproject/remapping/2.2.0:
     resolution: {integrity: sha512-qRmjj8nj9qmLTQXXmaR1cck3UXSRMPrbsLJAasZpF+t3riI71BXed5ebIOYwQntykeZuhjsdweEc9BxH5Jc26w==}

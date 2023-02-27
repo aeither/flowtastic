@@ -25,6 +25,7 @@ import { FC, useEffect, useMemo, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import NextLink from 'next/link'
 import { Link } from '@chakra-ui/react'
+import { randomColor } from '@aeither/randomcolor'
 
 export const CardRating: FC<{ playId: number }> = ({ playId }) => {
   const reviewAverage = useReviewAverage({
@@ -110,36 +111,43 @@ const Home: NextPage = () => {
           // modules={[Pagination]}
         >
           {allSetDatas.data &&
-            allSetDatas.data.map((setData) => (
-              <SwiperSlide key={setData.id}>
-                <Card
-                  mx={2}
-                  minH="24"
-                  border={'2px'}
-                  borderColor={selectedSet === setData.id ? 'teal.400' : cardBorderColor}
-                  _hover={{ borderColor: 'teal.400' }}
-                  onClick={() => {
-                    if (selectedSet === setData.id) {
-                      setSelectedSet(undefined)
-                    } else {
-                      setSelectedSet(setData.id)
+            allSetDatas.data.map((setData) => {
+              const color = randomColor({ luminosity: 'dark' }) as string
+
+              return (
+                <SwiperSlide key={setData.id}>
+                  <Card
+                    mx={2}
+                    minH="24"
+                    bgColor={color}
+                    border={'2px'}
+                    borderColor={
+                      selectedSet === setData.id ? 'teal.400' : cardBorderColor
                     }
-                  }}
-                >
-                  <CardBody
-                    display={'flex'}
-                    alignItems="center"
-                    justifyContent={'center'}
-                    h={'full'}
-                    cursor={'pointer'}
+                    _hover={{ borderColor: 'teal.400' }}
+                    onClick={() => {
+                      if (selectedSet === setData.id) {
+                        setSelectedSet(undefined)
+                      } else {
+                        setSelectedSet(setData.id)
+                      }
+                    }}
                   >
-                    <Center>
-                      <Text>{setData.name}</Text>
-                    </Center>
-                  </CardBody>
-                </Card>
-              </SwiperSlide>
-            ))}
+                    <CardBody
+                      display={'flex'}
+                      alignItems="center"
+                      justifyContent={'center'}
+                      h={'full'}
+                      cursor={'pointer'}
+                    >
+                      <Center>
+                        <Text fontWeight={'bold'}>{setData.name}</Text>
+                      </Center>
+                    </CardBody>
+                  </Card>
+                </SwiperSlide>
+              )
+            })}
         </Swiper>
       </Box>
 
