@@ -118,7 +118,6 @@ export const MomentA: FC = () => {
 }
 
 const Collection: NextPage = () => {
-  const { userAddress, addAddress } = useDB()
 
   return (
     <>

@@ -40,6 +40,7 @@ export const dbRouter = createTRPCRouter({
         where: {
           playId: input.playId,
         },
+        include: { user: { select: { address: true } } },
       })
     }),
 
@@ -63,10 +64,10 @@ export const dbRouter = createTRPCRouter({
         rating: z.number(),
         title: z.string(),
         description: z.string(),
+        fundraising: z.boolean(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { playId, rating, title, description } = input
       /**
        * Prisma DB check and update usage
        */
@@ -80,7 +81,7 @@ export const dbRouter = createTRPCRouter({
       }
 
       return await ctx.prisma.review.create({
-        data: { playId, rating, title, description, userId },
+        data: { userId, ...input },
       })
     }),
 

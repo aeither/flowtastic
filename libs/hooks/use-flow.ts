@@ -15,6 +15,42 @@ import { useStore } from '../store'
  * /////////////////////////////////////////////////////////////////////
  * /////////////////////////////////////////////////////////////////////
  */
+export const useTipReviewer = () => {
+  const CADENCE_SCRIPT_TIP_REVIEWER = `
+  // Mainnet
+  import FungibleToken from 0xFUNGIBLETOKENADDRESS
+  import FUSD from 0xFUSDADDRESS
+  
+  transaction(amount: UFix64, recipient: Address) {
+    let sentVault: @FungibleToken.Vault
+  
+    prepare(signer: AuthAccount) {
+      let vaultRef = signer.borrow<&FUSD.Vault>(from: /storage/fusdVault)
+        ?? panic("Could not borrow reference to the owner's Vault!")
+  
+      self.sentVault <- vaultRef.withdraw(amount: amount)
+    }
+  
+    execute {
+      let recipientAccount = getAccount(recipient)
+  
+      let receiverRef = recipientAccount.getCapability(/public/fusdReceiver)!
+        .borrow<&{FungibleToken.Receiver}>()
+        ?? panic("Could not borrow receiver reference to the recipient's Vault")
+  
+      receiverRef.deposit(from: <-self.sentVault)
+    }
+  }
+      `
+  const tipReviewer = useMutation({
+    cadence: CADENCE_SCRIPT_TIP_REVIEWER,
+  })
+  return tipReviewer
+}
+/**
+ * /////////////////////////////////////////////////////////////////////
+ * /////////////////////////////////////////////////////////////////////
+ */
 export const useUploadReview = () => {
   const CADENCE_SCRIPT_UPLOAD_REVIEW = `
       import Flowtastic from 0xFLOWTASTIC
@@ -105,7 +141,7 @@ export const useMedias = ({
   targetAddress,
 }: {
   momentNFT: string
-  targetAddress: string | null | undefined;
+  targetAddress: string | null | undefined
 }) => {
   const CADENCE_SCRIPT_NFT_METADATA_MEDIAS = `
       import Golazos from 0xGOLAZOSADDRESS
