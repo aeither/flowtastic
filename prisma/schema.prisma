@@ -59,6 +59,7 @@ model Review {
     playId      Int
     title       String?
     description String?
+    fundraising Boolean? @default(false)
     onChain     Boolean? @default(false)
     user        User     @relation(fields: [userId], references: [id])
     userId      String
