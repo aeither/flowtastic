@@ -23,8 +23,8 @@ const server = z.object({
   GOOGLE_CLIENT_SECRET: z.string(),
   DISCORD_CLIENT_ID: z.string(),
   DISCORD_CLIENT_SECRET: z.string(),
-  EMAIL_SERVER: z.string(),
-  EMAIL_FROM: z.string(),
+  // EMAIL_SERVER: z.string(),
+  // EMAIL_FROM: z.string(),
 })
 
 /**
@@ -50,8 +50,8 @@ const processEnv = {
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
   DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
-  EMAIL_SERVER: process.env.EMAIL_SERVER,
-  EMAIL_FROM: process.env.EMAIL_FROM,
+  // EMAIL_SERVER: process.env.EMAIL_SERVER,
+  // EMAIL_FROM: process.env.EMAIL_FROM,
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 }
 
