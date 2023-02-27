@@ -17,7 +17,7 @@ import { ReviewForm } from './review-form'
 
 export const ReviewFormModal: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const boxBgColor = useColorModeValue('gray.50', 'gray.800')
+  const boxBgColor = useColorModeValue('white', 'gray.800')
   return (
     <>
       <Box

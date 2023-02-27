@@ -1,6 +1,7 @@
 import { useDB } from '@/libs/hooks/use-db'
 import {
   Button,
+  Checkbox,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -16,6 +17,7 @@ export interface ReviewFormInput {
   rating: number
   title: string
   description: string
+  fundraising: boolean
 }
 
 export const ReviewForm: FC<{ onClose: () => void }> = ({ onClose }) => {
@@ -30,14 +32,9 @@ export const ReviewForm: FC<{ onClose: () => void }> = ({ onClose }) => {
     formState: { errors, isSubmitting },
   } = useForm<ReviewFormInput>()
 
-  const onSubmit: SubmitHandler<ReviewFormInput> = async (
-    { description, rating, title },
-    e
-  ) => {
+  const onSubmit: SubmitHandler<ReviewFormInput> = async (input, e) => {
     e?.preventDefault()
-
-    createReview.mutate({ description, playId, rating, title })
-
+    createReview.mutate({ playId, ...input })
     onClose()
   }
 
@@ -66,9 +63,7 @@ export const ReviewForm: FC<{ onClose: () => void }> = ({ onClose }) => {
             minLength: { value: 4, message: 'Minimum length should be 4' },
           })}
         />
-        <FormErrorMessage>
-          {errors.title && errors.title.message}
-        </FormErrorMessage>
+        <FormErrorMessage>{errors.title && errors.title.message}</FormErrorMessage>
       </FormControl>
       <FormControl isInvalid={!!errors.description}>
         <FormLabel htmlFor="description">Review</FormLabel>
@@ -84,13 +79,21 @@ export const ReviewForm: FC<{ onClose: () => void }> = ({ onClose }) => {
           {errors.description && errors.description.message}
         </FormErrorMessage>
       </FormControl>
-      <Button
-        mt={4}
-        w="full"
-        colorScheme="teal"
-        isLoading={isSubmitting}
-        type="submit"
-      >
+      <FormControl isInvalid={!!errors.fundraising}>
+        <FormLabel htmlFor="fundraising">Is fundraising?</FormLabel>
+        <Checkbox
+          {...register('fundraising', {
+            required: 'This is required',
+          })}
+        >
+          Allow receiving funds. Remember to add your wallet address in your profile.
+        </Checkbox>
+
+        <FormErrorMessage>
+          {errors.fundraising && errors.fundraising.message}
+        </FormErrorMessage>
+      </FormControl>
+      <Button mt={4} w="full" colorScheme="teal" isLoading={isSubmitting} type="submit">
         Submit
       </Button>
     </form>

@@ -2,7 +2,7 @@ import { MediaModal } from '@/components/home/media-modal'
 import { ReviewFormModal } from '@/components/home/review-form-modal'
 import Rating from '@/components/shared/rating'
 import { useDB, useReviewAverage, useReviewsByPlayId } from '@/libs/hooks/use-db'
-import { usePlayData, useUploadReview } from '@/libs/hooks/use-flow'
+import { usePlayData, useTipReviewer, useUploadReview } from '@/libs/hooks/use-flow'
 import { ImageType, PlayData, VideoType } from '@/libs/types'
 import { getPlayImage, getPlayVideo, timeAgo } from '@/libs/utils/helpers'
 import { LockIcon } from '@chakra-ui/icons'
@@ -13,6 +13,7 @@ import {
   Center,
   Heading,
   HStack,
+  Input,
   Stack,
   Text,
   useColorModeValue,
@@ -27,6 +28,7 @@ import { FC } from 'react'
 import { toast } from 'react-hot-toast'
 import { Navigation, Pagination } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 
 const IMAGE_MEDIA_TYPES = [
   'capture_Hero_Black',
@@ -38,6 +40,52 @@ const VIDEO_MEDIA_TYPES = [
   'capture_Animated_Video_Popout_Black',
   'capture_Animated_Video_Idle_Black',
 ]
+
+const FundraisingForm: FC<{ reviewer: string }> = ({ reviewer }) => {
+  const {
+    handleSubmit,
+    register,
+    formState: { isSubmitting },
+  } = useForm<{ amount: string }>()
+  const tipReviewer = useTipReviewer()
+  const bgColor = useColorModeValue('gray.50', 'gray.800')
+
+  const onSubmit: SubmitHandler<{ amount: string }> = async ({ amount }, e) => {
+    e?.preventDefault()
+    const formattedAmount = Number(amount).toFixed(8)
+
+    const promise = tipReviewer.mutateAsync({
+      args: (arg, t) => [arg(formattedAmount, t.UFix64), arg(reviewer, t.Address)],
+    })
+
+    toast.promise(promise, {
+      loading: 'Funding...',
+      success: 'Success!!!',
+      error: 'Something went wront :(',
+    })
+  }
+
+  return (
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <VStack boxShadow={'lg'} bg={bgColor} p="2" borderRadius={'lg'}>
+          <Text fontWeight={'bold'}>Fundraising</Text>
+          <Input
+            type={'number'}
+            step=".00000001"
+            placeholder="0.01"
+            {...register('amount', {
+              required: 'This is required',
+            })}
+          />
+          <Button variant={'outline'} w="full" type="submit" isLoading={isSubmitting}>
+            Fund
+          </Button>
+        </VStack>
+      </form>
+    </>
+  )
+}
 
 const UploadOnChain: FC<{ review: Review; playId: number | undefined }> = ({
   review,
@@ -96,7 +144,7 @@ const UploadOnChain: FC<{ review: Review; playId: number | undefined }> = ({
             await login()
           }}
         >
-          Sign in to Save on-chain
+          Connect Wallet to Save on-chain
         </Button>
       )}
     </>
@@ -176,6 +224,11 @@ const Reviews: FC<{ playId: number | undefined }> = ({ playId }) => {
                     {review.description} - {review.rating}
                   </Text>
                   <Text textColor={timeTextColor}>{timeAgo(review.createdAt)}</Text>
+                  {review.user.address && review.fundraising === true && (
+                    <>
+                      <FundraisingForm reviewer={review.user.address} />
+                    </>
+                  )}
                   {review.onChain === true ? (
                     <>
                       <HStack>
