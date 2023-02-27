@@ -46,7 +46,7 @@ export function useDB() {
 
       toast.loading('Loading...')
     },
-    onSuccess(data, variables, context) {
+    onSuccess() {
       toast.remove()
       toast.success('Success')
 
@@ -66,15 +66,7 @@ export function useDB() {
   const updateReview = api.db.updateReview.useMutation()
 
   const addAddress = api.db.addAddress.useMutation({
-    onMutate() {
-      toast.loading('Loading...')
-    },
-    onSuccess() {
-      toast.remove()
-      toast.success('Success')
-    },
     onError: ({ data }) => {
-      toast.remove()
       if (data?.code === 'UNAUTHORIZED') {
         toast.error('Require sign in')
       } else {
@@ -82,6 +74,7 @@ export function useDB() {
       }
     },
   })
+
   return {
     createReview,
     updateReview,

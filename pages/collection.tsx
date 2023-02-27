@@ -28,6 +28,7 @@ import { useAuthentication, verifyUserSignatures } from '@flowity/react'
 import { type NextPage } from 'next'
 import NextLink from 'next/link'
 import { FC } from 'react'
+import toast from 'react-hot-toast'
 
 const MESSAGE = Buffer.from('Use as Collection wallet').toString('hex')
 
@@ -137,7 +138,19 @@ const Collection: NextPage = () => {
                       const sigVerified = await verifyUserSignatures(MESSAGE, sigs)
                       if (!sigVerified) return
                       if (user) {
-                        addAddress.mutate({ address: user.addr })
+                        const promise = addAddress.mutateAsync(
+                          { address: user.addr },
+                          {
+                            onSuccess() {
+                              userAddress.refetch()
+                            },
+                          },
+                        )
+                        toast.promise(promise, {
+                          loading: 'Updating...',
+                          success: 'Success!!!',
+                          error: 'Something went wront :(',
+                        })
                       }
                     }}
                   >
