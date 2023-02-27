@@ -113,7 +113,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
       {/* Footer */}
       <Flex justify={'center'} p={4}>
-        Flowtastic © 2023
+        Flowtastic © 2023. <Link href="https://twitter.com/flowtastic_find" textColor={'blue.500'}>Twitter</Link>
       </Flex>
     </div>
   )

@@ -96,7 +96,7 @@ const UploadOnChain: FC<{ review: Review; playId: number | undefined }> = ({
             await login()
           }}
         >
-          Sign in Save on-chain
+          Sign in to Save on-chain
         </Button>
       )}
     </>
