@@ -81,11 +81,7 @@ export const ReviewForm: FC<{ onClose: () => void }> = ({ onClose }) => {
       </FormControl>
       <FormControl isInvalid={!!errors.fundraising}>
         <FormLabel htmlFor="fundraising">Is fundraising?</FormLabel>
-        <Checkbox
-          {...register('fundraising', {
-            required: 'This is required',
-          })}
-        >
+        <Checkbox {...register('fundraising')}>
           Allow receiving funds. Remember to add your wallet address in your profile.
         </Checkbox>
 
