@@ -47,7 +47,6 @@ export const MomentA: FC = () => {
         {playId !== 0 && playData.data && (
           <VStack justify={'start'}>
             <Image
-              // boxSize="100px"
               maxBlockSize={'350px'}
               src={getPlayImage(playData.data.metadata.PlayDataID, 'capture_Hero_Black')}
               alt={playData.data.metadata.PlayDataID}

@@ -55,7 +55,7 @@ const Rating = React.forwardRef(
           as="button"
           aria-label={`Rate ${idx}`}
           variant={'unstyled'}
-          size={{ base: 'sm', md: 'md' }}
+          minW={{ base: '7', md: '12' }}
           onClick={() => (viewOnly ? {} : onClick(idx))}
           _focus={{ outline: 0 }}
         >
