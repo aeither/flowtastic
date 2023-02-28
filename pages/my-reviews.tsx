@@ -45,13 +45,26 @@ const MyReviews: NextPage = () => {
                     </Text>
                     <HStack spacing={6} pt={4}>
                       <LockIcon />
-                      <Text textColor={'gray.400'} >This Review is Securely stored on Flow Blockchain</Text>
+                      <Text textColor={'gray.400'}>
+                        This Review is Securely stored on Flow Blockchain
+                      </Text>
                     </HStack>
                   </Stack>
                 </CardBody>
               </Card>
             </Center>
           ))}
+        {data === undefined && (
+          <Center>
+            <Card maxW="sm">
+              <CardBody>
+                <Stack mt="6" spacing="3">
+                  <Heading size="md">No Review Found on the Blockchain</Heading>
+                </Stack>
+              </CardBody>
+            </Card>
+          </Center>
+        )}
       </VStack>
     </>
   )

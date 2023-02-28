@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  Link,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-} from '@chakra-ui/react'
+import { Avatar, Link, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
 import { signOut, useSession } from 'next-auth/react'
 import NextLink from 'next/link'
 import { FC } from 'react'
@@ -23,23 +16,16 @@ export const UserDropdown: FC = () => {
           <Avatar size={'sm'} name={name || 'acme'} src={image || ''} />
         </MenuButton>
         <MenuList zIndex={50}>
-          <Link
-            _hover={{ textDecoration: 'none' }}
-            as={NextLink}
-            href="/compare"
-          >
+          <Link _hover={{ textDecoration: 'none' }} as={NextLink} href="/compare">
             <MenuItem>Compare</MenuItem>
           </Link>
-          <Link
-            _hover={{ textDecoration: 'none' }}
-            as={NextLink}
-            href="/collection"
-          >
+          <Link _hover={{ textDecoration: 'none' }} as={NextLink} href="/collection">
             <MenuItem>Collection</MenuItem>
           </Link>
-          <MenuItem onClick={() => void signOut({ redirect: false })}>
-            Logout
-          </MenuItem>
+          <Link _hover={{ textDecoration: 'none' }} as={NextLink} href="/my-reviews">
+            <MenuItem>My Reviews</MenuItem>
+          </Link>
+          <MenuItem onClick={() => void signOut({ redirect: false })}>Logout</MenuItem>
         </MenuList>
       </Menu>
     </>
