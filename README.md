@@ -14,6 +14,10 @@
 
 ![Hero](https://user-images.githubusercontent.com/36173828/221955288-83eb727c-c0f9-4043-8dae-4e84d6b0f0ec.png)
 
+# Demo
+
+https://flowtastic.vercel.app
+
 # Features
 
 ![Features](https://user-images.githubusercontent.com/36173828/221959301-856e999a-d137-44b5-b91f-7f05ca856725.png)
