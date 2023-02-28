@@ -2,6 +2,7 @@ import Rating from '@/components/shared/rating'
 import { useAllReviewsByOwner } from '@/libs/hooks/use-flow'
 import { LockIcon } from '@chakra-ui/icons'
 import {
+  Button,
   Card,
   CardBody,
   Center,
@@ -15,7 +16,7 @@ import { useAuthentication } from '@flowity/react'
 import { type NextPage } from 'next'
 
 const MyReviews: NextPage = () => {
-  const { user } = useAuthentication()
+  const { user, login, isLoggedIn } = useAuthentication()
   const { data } = useAllReviewsByOwner({ address: user?.addr })
 
   return (
@@ -54,11 +55,24 @@ const MyReviews: NextPage = () => {
               </Card>
             </Center>
           ))}
+        {!isLoggedIn && (
+          <Center mb={4}>
+            <Stack spacing="3">
+              <Button
+                onClick={async () => {
+                  await login()
+                }}
+              >
+                Connect Wallet
+              </Button>
+            </Stack>
+          </Center>
+        )}
         {data === undefined && (
           <Center>
             <Card maxW="sm">
               <CardBody>
-                <Stack mt="6" spacing="3">
+                <Stack spacing="3">
                   <Heading size="md">No Review Found on the Blockchain</Heading>
                 </Stack>
               </CardBody>
