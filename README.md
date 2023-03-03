@@ -50,7 +50,7 @@ Simply connect the wallet to show details and reviews of all the moments.
 ![architecture](https://user-images.githubusercontent.com/36173828/221844465-78fe847a-c9d5-4688-87c3-1e68cc7a9597.png)
 
 # Techstack
-NextJS, React, Typescript, tRPC, Prisma, Chakra-UI.
+NextJS, React, Typescript, Chakra-UI, tRPC, Prisma, PostgresSQL
 
 FCL SDK: connect and authenticate wallet, run scripts to fetch data and run transaction to store reviews and tip reviewer.
 
