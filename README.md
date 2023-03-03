@@ -8,7 +8,7 @@
 
 <h3 align="center">
   Find, compare and choose the right Moment with user reviews.
-<h3>![App Flow](https://user-images.githubusercontent.com/36173828/222693220-ff51372c-b900-4043-9b00-574218700bed.png)
+<h3>
 
 
 # Flowtastic
