@@ -1,14 +1,14 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/36173828/221953399-c1ac151a-63c3-4a65-a7f4-5b13b8d77b43.png">
-    <img alt="wagmi logo" src="https://user-images.githubusercontent.com/36173828/221953399-c1ac151a-63c3-4a65-a7f4-5b13b8d77b43.png" width="auto" height="60">
+    <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/36173828/222692508-39bc3afc-4f4d-4ed2-9713-43c8e2a43a38.png">
+    <img alt="wagmi logo" src="https://user-images.githubusercontent.com/36173828/222692508-39bc3afc-4f4d-4ed2-9713-43c8e2a43a38.png" width="auto" height="120">
   </picture>
 </p>
 
-<p align="center">
+<h3 align="center">
   Find, compare and choose the right Moment with user reviews.
-<p>
+<h3>
 
 # Flowtastic
 
@@ -62,6 +62,8 @@ Cadence: Review Contract, fetching and transaction scripts.
 - Chat
 - More Projects Integrations
 - Events
+
+
 
 # Screenshots
 ![desktop1](https://user-images.githubusercontent.com/36173828/221965225-869649ef-4e3d-448b-826c-8277dbe0f5a5.png)
