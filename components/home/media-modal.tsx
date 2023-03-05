@@ -44,9 +44,7 @@ export function MediaModal({
           </ModalBody>
           <ModalFooter>
             {!videolUrl && (
-              <Button onClick={() => downloadPhoto(srcUrl, playId)}>
-                Download
-              </Button>
+              <Button onClick={() => downloadPhoto(srcUrl, playId)}>Download</Button>
             )}
           </ModalFooter>
         </ModalContent>

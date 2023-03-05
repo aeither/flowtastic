@@ -117,7 +117,6 @@ export const MomentA: FC = () => {
 }
 
 const Collection: NextPage = () => {
-
   return (
     <>
       <HStack

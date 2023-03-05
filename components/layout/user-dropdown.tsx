@@ -6,7 +6,6 @@ import { FC } from 'react'
 export const UserDropdown: FC = () => {
   const { data: session } = useSession()
   const { email, image, name } = session?.user || {}
-  console.log('🚀 ~ file: user-dropdown.tsx:31 ~ image:', image)
   if (!email) return null
 
   return (

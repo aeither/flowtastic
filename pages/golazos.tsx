@@ -1,5 +1,6 @@
 import Rating from '@/components/shared/rating'
 import { ViewDetailsButton } from '@/components/shared/view-details-button'
+import { RANDOM_COLORS } from '@/libs/constants'
 import { useReviewAverage } from '@/libs/hooks/use-db'
 import { useFlow } from '@/libs/hooks/use-flow'
 import { getPlayImage } from '@/libs/utils/helpers'
@@ -13,6 +14,7 @@ import {
   Heading,
   HStack,
   Image,
+  Link,
   SimpleGrid,
   Stack,
   Tag,
@@ -21,11 +23,9 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { type NextPage } from 'next'
-import { FC, useEffect, useMemo, useState } from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react'
 import NextLink from 'next/link'
-import { Link } from '@chakra-ui/react'
-import { randomColor } from '@aeither/randomcolor'
+import { FC, useMemo, useState } from 'react'
+import { Swiper, SwiperSlide } from 'swiper/react'
 
 export const CardRating: FC<{ playId: number }> = ({ playId }) => {
   const reviewAverage = useReviewAverage({
@@ -54,9 +54,6 @@ export const CardRating: FC<{ playId: number }> = ({ playId }) => {
 const Home: NextPage = () => {
   const [selectedSet, setSelectedSet] = useState<string>()
   const { allPlays, allSetDatas, allEditions } = useFlow()
-  console.log('🚀 ~ file: golazos.tsx:56 ~ allPlays:', allPlays)
-  console.log('🚀 ~ file: golazos.tsx:56 ~ allEditions:', allEditions)
-  console.log('🚀 ~ file: golazos.tsx:56 ~ allSetDatas:', allSetDatas)
   const cardBorderColor = useColorModeValue('gray.200', 'gray.800')
 
   const filteredEditions = useMemo(() => {
@@ -68,10 +65,6 @@ const Home: NextPage = () => {
     }
     return res
   }, [allEditions.data, selectedSet])
-  console.log(
-    '🚀 ~ file: golazos.tsx:59 ~ filteredEditions ~ filteredEditions:',
-    filteredEditions,
-  )
 
   return (
     <>
@@ -85,8 +78,8 @@ const Home: NextPage = () => {
           h={'full'}
         />
         <VStack h={'full'} pos={'relative'} align={'center'} justify={'center'}>
-          <Heading>Get Started</Heading>
-          <Text>Explore your moments.</Text>
+          <Heading textColor={'white'}>Get Started</Heading>
+          <Text textColor={'white'}>Explore your moments.</Text>
           <Link
             as={NextLink}
             _hover={{
@@ -111,8 +104,8 @@ const Home: NextPage = () => {
           // modules={[Pagination]}
         >
           {allSetDatas.data &&
-            allSetDatas.data.map((setData) => {
-              const color = randomColor({ luminosity: 'dark' }) as string
+            allSetDatas.data.map((setData, i) => {
+              const color = RANDOM_COLORS[i]
 
               return (
                 <SwiperSlide key={setData.id}>
